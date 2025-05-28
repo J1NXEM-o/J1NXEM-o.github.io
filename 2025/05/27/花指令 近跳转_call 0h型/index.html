@@ -19,25 +19,37 @@
   <meta name="author" content="J1NXEM">
   <meta name="keywords" content="zh-CN">
   
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="1、LitCTF 2025 | easy_tea直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉   然后一整个部分再按p识别成函数，然后f5，   这里主tea加密部分仍然看不到，进去之后看到这一部分还是花，nop掉之后，把下面的部分按d，最后直接按p和f5反汇编和上面的操作一样   就是这个  2、camellia">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://j1nxem-o.github.io/2025/04/22/hello-world/index.html">
+<meta property="og:title" content="J1NXEM&#39;s blog">
+<meta property="og:url" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/index.html">
 <meta property="og:site_name" content="J1NXEM&#39;s blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="1、LitCTF 2025 | easy_tea直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉   然后一整个部分再按p识别成函数，然后f5，   这里主tea加密部分仍然看不到，进去之后看到这一部分还是花，nop掉之后，把下面的部分按d，最后直接按p和f5反汇编和上面的操作一样   就是这个  2、camellia">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-04-22T11:42:41.792Z">
-<meta property="article:modified_time" content="2025-04-22T11:03:47.585Z">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748156802943-5ca7a1a1-d4da-44b7-ac8a-e0b02bc5ce64.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748157133860-594bd735-621f-4b69-9564-565013940fa9.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748158922220-5ba14ed3-ad50-4163-8c5c-c48ca5c46ca9.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/49880193/1748158994064-994e28c8-4f53-45e0-8fba-7060a014862c.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265437282-ca23e09a-5d61-44c2-959a-3e1ab5548442.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265547366-af439ace-6b78-4daa-aa03-f8fd009f2356.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265569545-903ce15d-1578-4883-84a5-aa96a66ea0ac.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265606545-3029a54e-ddd7-451f-9533-139cf0f4329e.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265719037-76768853-aa08-48b3-8466-b05e212c594d.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265732620-495077ac-5273-4746-a822-da72ef0d50f0.png">
+<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265781359-bf8f1459-1992-42ff-bc7c-1c8a95a57090.png">
+<meta property="article:published_time" content="2025-05-27T14:12:50.261Z">
+<meta property="article:modified_time" content="2025-05-27T16:09:00.677Z">
 <meta property="article:author" content="J1NXEM">
 <meta property="article:tag" content="zh-CN">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://j1nxem-o.github.io/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748156802943-5ca7a1a1-d4da-44b7-ac8a-e0b02bc5ce64.png">
 <meta name="twitter:creator" content="@J1NXEM">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Hello World - J1NXEM&#39;s blog</title>
+  <title>J1NXEM&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -196,13 +208,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/7.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/page.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hello World"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -218,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-04-22 19:42" pubdate>
-          2025年4月22日 晚上
+        <time datetime="2025-05-27 22:12" pubdate>
+          2025年5月27日 晚上
         </time>
       </span>
     
@@ -230,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          18 字
+          296 字
         
       </span>
     
@@ -241,7 +253,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -287,12 +299,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Hello World</h1>
+            <h1 id="seo-header"></h1>
             
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-04-22T19:03:47+08:00
+                    本文最后更新于 2025-05-28T00:09:00+08:00
                   
                   
 
@@ -302,20 +314,37 @@
             
               <div class="markdown-body">
                 
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+                <h3 id="1、LitCTF-2025-easy-tea"><a href="#1、LitCTF-2025-easy-tea" class="headerlink" title="1、LitCTF 2025 | easy_tea"></a>1、LitCTF 2025 | easy_tea</h3><p>直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748156802943-5ca7a1a1-d4da-44b7-ac8a-e0b02bc5ce64.png" srcset="/img/loading.gif" lazyload class>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+<p>然后一整个部分再按p识别成函数，然后f5，</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748157133860-594bd735-621f-4b69-9564-565013940fa9.png" srcset="/img/loading.gif" lazyload class>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+<p>这里主tea加密部分仍然看不到，进去之后看到这一部分还是花，nop掉之后，把下面的部分按d，最后直接按p和f5反汇编和上面的操作一样</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748158922220-5ba14ed3-ad50-4163-8c5c-c48ca5c46ca9.png" srcset="/img/loading.gif" lazyload class>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+<p>就是这个</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/49880193/1748158994064-994e28c8-4f53-45e0-8fba-7060a014862c.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2、camellia-练习"><a href="#2、camellia-练习" class="headerlink" title="2、camellia-练习"></a>2、camellia-练习</h3><p>这个题也一样，把近跳转nop掉之后，再把下面的那段按d看机器码更方便</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265437282-ca23e09a-5d61-44c2-959a-3e1ab5548442.png" srcset="/img/loading.gif" lazyload class>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>这里就是要nop掉的，call 0h类型</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265547366-af439ace-6b78-4daa-aa03-f8fd009f2356.png" srcset="/img/loading.gif" lazyload class>
 
+<p>如果看不出来也可以把这一小段按c强制编译看汇编，这里就是花指令，nop掉</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265569545-903ce15d-1578-4883-84a5-aa96a66ea0ac.png" srcset="/img/loading.gif" lazyload class>
+
+<p>然后再把剩下的那一段按c强制编译，没啥问题，已经除掉花了</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265606545-3029a54e-ddd7-451f-9533-139cf0f4329e.png" srcset="/img/loading.gif" lazyload class>
+
+<p>然后f5看伪代码，发现这里的加密函数位置还有无法编译的花指令</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265719037-76768853-aa08-48b3-8466-b05e212c594d.png" srcset="/img/loading.gif" lazyload class>
+
+<p>进入那个函数，还是一样的思路，nop掉之后反编译就能看到代码了</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265732620-495077ac-5273-4746-a822-da72ef0d50f0.png" srcset="/img/loading.gif" lazyload class>
+
+<p>这就是主要的tea加密算法，解密就行</p>
+<img src="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4%20%E8%BF%91%E8%B7%B3%E8%BD%AC_call%200h%E5%9E%8B/1748265781359-bf8f1459-1992-42ff-bc7c-1c8a95a57090.png" srcset="/img/loading.gif" lazyload class>
                 
               </div>
             
@@ -332,8 +361,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hello World</div>
-      <div>https://j1nxem-o.github.io/2025/04/22/hello-world/</div>
+      <div></div>
+      <div>https://j1nxem-o.github.io/2025/05/27/花指令 近跳转_call 0h型/</div>
     </div>
     <div class="license-meta">
       
@@ -345,13 +374,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年4月22日</div>
+          <div>2025年5月27日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年4月22日</div>
+          <div>2025年5月28日</div>
         </div>
       
       
@@ -381,6 +410,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/05/27/a/" title="a">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">a</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
