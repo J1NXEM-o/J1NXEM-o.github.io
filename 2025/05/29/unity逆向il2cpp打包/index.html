@@ -19,18 +19,27 @@
   <meta name="author" content="J1NXEM">
   <meta name="keywords" content="zh-CN">
   
-    <meta property="og:type" content="article">
+    <meta name="description" content="unity逆向-il2cppLitCTF 2025-Robbie Wanna Revengeil2cpp打包的unity游戏题，在网上搜了文章， 根据晓梦的文章https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;15811 和swdd的文章https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_24481913&#x2F;article&#x2F;details&#x2F;148234091?sharetype&#x3D;blogdetai">
+<meta property="og:type" content="article">
 <meta property="og:title" content="unity逆向il2cpp打包">
 <meta property="og:url" content="https://j1nxem-o.github.io/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/index.html">
 <meta property="og:site_name" content="J1NXEM&#39;s blog">
+<meta property="og:description" content="unity逆向-il2cppLitCTF 2025-Robbie Wanna Revengeil2cpp打包的unity游戏题，在网上搜了文章， 根据晓梦的文章https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;15811 和swdd的文章https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_24481913&#x2F;article&#x2F;details&#x2F;148234091?sharetype&#x3D;blogdetai">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://j1nxem-o.github.io/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/image-20250529103044168.png">
-<meta property="article:published_time" content="2025-05-29T02:29:49.000Z">
-<meta property="article:modified_time" content="2025-05-29T02:30:45.969Z">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528233715951.png">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528213639891.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291124121.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291124119.png">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528234206707.png">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528225350874.png">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528225834456.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291125608.png">
+<meta property="article:published_time" content="2025-05-29T03:24:39.000Z">
+<meta property="article:modified_time" content="2025-05-29T03:26:02.449Z">
 <meta property="article:author" content="J1NXEM">
-<meta property="article:tag" content="zh-CN">
+<meta property="article:tag" content="复现">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://j1nxem-o.github.io/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/image-20250529103044168.png">
+<meta name="twitter:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528233715951.png">
 <meta name="twitter:creator" content="@J1NXEM">
   
   
@@ -218,7 +227,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-05-29 10:29" pubdate>
+        <time datetime="2025-05-29 11:24" pubdate>
           2025年5月29日 上午
         </time>
       </span>
@@ -230,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          0 字
+          334 字
         
       </span>
     
@@ -241,7 +250,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -292,7 +301,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-05-29T10:30:45+08:00
+                    本文最后更新于 2025-05-29T11:26:02+08:00
                   
                   
 
@@ -302,7 +311,28 @@
             
               <div class="markdown-body">
                 
-                <p><img src="/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/image-20250529103044168.png" srcset="/img/loading.gif" lazyload alt="image-20250529103044168"></p>
+                <h1 id="unity逆向-il2cpp"><a href="#unity逆向-il2cpp" class="headerlink" title="unity逆向-il2cpp"></a>unity逆向-il2cpp</h1><h3 id="LitCTF-2025-Robbie-Wanna-Revenge"><a href="#LitCTF-2025-Robbie-Wanna-Revenge" class="headerlink" title="LitCTF 2025-Robbie Wanna Revenge"></a>LitCTF 2025-Robbie Wanna Revenge</h3><p>il2cpp打包的unity游戏题，在网上搜了文章，</p>
+<p>根据晓梦的文章<a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/15811">https://xz.aliyun.com/news/15811</a></p>
+<p>和swdd的文章<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_24481913/article/details/148234091?sharetype=blogdetail&sharerId=148234091&sharerefer=PC&sharesource=qq_24481913&spm=1011.2480.3001.8118">https://blog.csdn.net/qq_24481913/article/details/148234091?sharetype=blogdetail&amp;sharerId=148234091&amp;sharerefer=PC&amp;sharesource=qq_24481913&amp;spm=1011.2480.3001.8118</a></p>
+<p>利用ilcppdumper提取il2cpp等文件，这是il2cppdumper下载的网址<a target="_blank" rel="noopener" href="https://github.com/Perfare/Il2CppDumper/">https://github.com/Perfare/Il2CppDumper/</a></p>
+<p>在终端输入命令 <code>.\Il2CppDumper.exe 文件名.dll 文件名.dat output</code>，dll文件就是GameAssembly.dll</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528233715951.png" srcset="/img/loading.gif" lazyload alt="image-20250528233715951"></p>
+<p>直接运行命令发现报错，识别不到，再看dll文件，加了壳</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528213639891.png" srcset="/img/loading.gif" lazyload alt="image-20250528213639891"></p>
+<p>还修改了特征码，用010改回来之后再脱壳</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291124121.png" srcset="/img/loading.gif" lazyload alt="image-20250528223136275"></p>
+<p>脱壳之后再运行命令。就成功dump了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291124119.png" srcset="/img/loading.gif" lazyload alt="image-20250528223115942"></p>
+<p>这就是dump出来的文件</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528234206707.png" srcset="/img/loading.gif" lazyload alt="image-20250528234206707"></p>
+<p>用dnspy查看Assembly-CSharp.dll（来自dump后的文件中）的内容，找到playerhealth函数的内容，这里面主要是通过playerdied来判断角色是否死亡，</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528225350874.png" srcset="/img/loading.gif" lazyload alt="image-20250528225350874"></p>
+<p>用ida打开脱壳后的GameAssembly.dll文件，再附加文件，左上角file&#x2F;script file，附加ida_with_struct_py3.py和script.json文件，然后再加上il2cpp.h文件</p>
+<p>等到加载完成之后，找到对应的playerhealth函数的位置，看汇编，找到对应位置，把下面的jnz改为jmp（强跳转）</p>
+<p>ps：这里强跳转就是 把jnz对应的机器码0F 85改为jmp的机器码90 E9</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20250528225834456.png" srcset="/img/loading.gif" lazyload alt="image-20250528225834456"></p>
+<p>修改成功之后就是这样，然后patch保存之后再重新运行游戏就是无敌状态了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291125608.png" srcset="/img/loading.gif" lazyload alt="image-20250528231357969"></p>
 
                 
               </div>
@@ -311,6 +341,13 @@
             <div>
               <div class="post-metas my-3">
   
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%A4%8D%E7%8E%B0/" class="print-no-link">#复现</a>
+      
+    </div>
   
 </div>
 
@@ -369,12 +406,6 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
-                    
-                      <a href="/2025/05/29/1/" title="1">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">1</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
                     
                   </article>
                   <article class="post-next col-6">
