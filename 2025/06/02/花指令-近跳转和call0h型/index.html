@@ -19,34 +19,38 @@
   <meta name="author" content="J1NXEM">
   <meta name="keywords" content="zh-CN">
   
-    <meta name="description" content="unity逆向-il2cppLitCTF 2025-Robbie Wanna Revengeil2cpp打包的unity游戏题，在网上搜了文章， 根据晓梦的文章https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;15811 和swdd的文章https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_24481913&#x2F;article&#x2F;details&#x2F;148234091?sharetype&#x3D;blogdetai">
+    <meta name="description" content="根据https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;14062 这位师傅的文章学习来的 这两道题目的花指令都是近跳转和call 0h型  1、LitCTF 2025 | easy_tea直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉  然后一整个部分再按p识别成函数，然后f5，  这里主tea加密部分仍然看不到">
 <meta property="og:type" content="article">
-<meta property="og:title" content="unity逆向il2cpp打包">
-<meta property="og:url" content="https://j1nxem-o.github.io/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/index.html">
+<meta property="og:title" content="花指令-近跳转和call0h型">
+<meta property="og:url" content="https://j1nxem-o.github.io/2025/06/02/%E8%8A%B1%E6%8C%87%E4%BB%A4-%E8%BF%91%E8%B7%B3%E8%BD%AC%E5%92%8Ccall0h%E5%9E%8B/index.html">
 <meta property="og:site_name" content="J1NXEM&#39;s blog">
-<meta property="og:description" content="unity逆向-il2cppLitCTF 2025-Robbie Wanna Revengeil2cpp打包的unity游戏题，在网上搜了文章， 根据晓梦的文章https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;15811 和swdd的文章https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_24481913&#x2F;article&#x2F;details&#x2F;148234091?sharetype&#x3D;blogdetai">
+<meta property="og:description" content="根据https:&#x2F;&#x2F;xz.aliyun.com&#x2F;news&#x2F;14062 这位师傅的文章学习来的 这两道题目的花指令都是近跳转和call 0h型  1、LitCTF 2025 | easy_tea直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉  然后一整个部分再按p识别成函数，然后f5，  这里主tea加密部分仍然看不到">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291128040.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291144110.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147990.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147004.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291522063.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291523692.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291523443.png">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147003.png">
-<meta property="article:published_time" content="2025-05-29T03:24:39.000Z">
-<meta property="article:modified_time" content="2025-05-29T07:23:19.220Z">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022341874.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337395.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337449.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337445.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337401.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337040.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337415.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336973.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336957.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337991.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2025/png/49880193/1748265732620-495077ac-5273-4746-a822-da72ef0d50f0.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336945.png">
+<meta property="article:published_time" content="2025-06-02T15:35:53.000Z">
+<meta property="article:modified_time" content="2025-06-02T15:49:02.696Z">
 <meta property="article:author" content="J1NXEM">
-<meta property="article:tag" content="zh-CN">
+<meta property="article:tag" content="学习">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291128040.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022341874.png">
 <meta name="twitter:creator" content="@J1NXEM">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>unity逆向il2cpp打包 - J1NXEM&#39;s blog</title>
+  <title>花指令-近跳转和call0h型 - J1NXEM&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="unity逆向il2cpp打包"></span>
+            <span id="subtitle" data-typed-text="花指令-近跳转和call0h型"></span>
           
         </div>
 
@@ -227,8 +231,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-05-29 11:24" pubdate>
-          2025年5月29日 上午
+        <time datetime="2025-06-02 23:35" pubdate>
+          2025年6月2日 晚上
         </time>
       </span>
     
@@ -239,7 +243,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          334 字
+          330 字
         
       </span>
     
@@ -296,12 +300,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">unity逆向il2cpp打包</h1>
+            <h1 id="seo-header">花指令-近跳转和call0h型</h1>
             
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-05-29T15:23:19+08:00
+                    本文最后更新于 2025-06-02T23:49:02+08:00
                   
                   
 
@@ -311,28 +315,31 @@
             
               <div class="markdown-body">
                 
-                <h1 id="unity逆向-il2cpp"><a href="#unity逆向-il2cpp" class="headerlink" title="unity逆向-il2cpp"></a>unity逆向-il2cpp</h1><h3 id="LitCTF-2025-Robbie-Wanna-Revenge"><a href="#LitCTF-2025-Robbie-Wanna-Revenge" class="headerlink" title="LitCTF 2025-Robbie Wanna Revenge"></a>LitCTF 2025-Robbie Wanna Revenge</h3><p>il2cpp打包的unity游戏题，在网上搜了文章，</p>
-<p>根据晓梦的文章<a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/15811">https://xz.aliyun.com/news/15811</a></p>
-<p>和swdd的文章<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_24481913/article/details/148234091?sharetype=blogdetail&sharerId=148234091&sharerefer=PC&sharesource=qq_24481913&spm=1011.2480.3001.8118">https://blog.csdn.net/qq_24481913/article/details/148234091?sharetype=blogdetail&amp;sharerId=148234091&amp;sharerefer=PC&amp;sharesource=qq_24481913&amp;spm=1011.2480.3001.8118</a></p>
-<p>利用ilcppdumper提取il2cpp等文件，这是il2cppdumper下载的网址<a target="_blank" rel="noopener" href="https://github.com/Perfare/Il2CppDumper/">https://github.com/Perfare/Il2CppDumper/</a></p>
-<p>在终端输入命令 <code>.\Il2CppDumper.exe 文件名.dll 文件名.dat output</code>，dll文件就是GameAssembly.dll</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291128040.png" srcset="/img/loading.gif" lazyload alt="image-20250528233715951"></p>
-<p>直接运行命令发现报错，识别不到，再看dll文件，加了壳</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291144110.png" srcset="/img/loading.gif" lazyload alt="image-20250528213639891"></p>
-<p>还修改了特征码，用010改回来之后再脱壳</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147990.png" srcset="/img/loading.gif" lazyload alt="image-20250528223136275"></p>
-<p>脱壳之后再运行命令。就成功dump了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147004.png" srcset="/img/loading.gif" lazyload alt="image-20250528223115942"></p>
-<p>这就是dump出来的文件</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291522063.png" srcset="/img/loading.gif" lazyload alt="image-20250528234206707"></p>
-<p>用dnspy查看Assembly-CSharp.dll（来自dump后的文件中）的内容，找到playerhealth函数的内容，这里面主要是通过playerdied来判断角色是否死亡，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291523692.png" srcset="/img/loading.gif" lazyload alt="image-20250528225350874"></p>
-<p>用ida打开脱壳后的GameAssembly.dll文件，再附加文件，左上角file&#x2F;script file，附加ida_with_struct_py3.py和script.json文件，然后再加上il2cpp.h文件</p>
-<p>等到加载完成之后，找到对应的playerhealth函数的位置，看汇编，找到对应位置，把下面的jnz改为jmp（强跳转）</p>
-<p>ps：这里强跳转就是 把jnz对应的机器码0F 85改为jmp的机器码90 E9</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291523443.png" srcset="/img/loading.gif" lazyload alt="image-20250528225834456"></p>
-<p>修改成功之后就是这样，然后patch保存之后再重新运行游戏就是无敌状态了</p>
-<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202505291147003.png" srcset="/img/loading.gif" lazyload alt="image-20250528231357969"></p>
+                <p>根据<a target="_blank" rel="noopener" href="https://xz.aliyun.com/news/14062">https://xz.aliyun.com/news/14062</a> 这位师傅的文章学习来的</p>
+<p>这两道题目的花指令都是近跳转和call 0h型</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022341874.png" srcset="/img/loading.gif" lazyload alt="image-20250602234135782"></p>
+<h3 id="1、LitCTF-2025-easy-tea"><a href="#1、LitCTF-2025-easy-tea" class="headerlink" title="1、LitCTF 2025 | easy_tea"></a>1、LitCTF 2025 | easy_tea</h3><p>直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337395.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后一整个部分再按p识别成函数，然后f5，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337449.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里主tea加密部分仍然看不到，进去之后看到这一部分还是花，nop掉之后，把下面的部分按d，最后直接按p和f5反汇编和上面的操作一样</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337445.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>就是这个</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337401.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="2、camellia-练习"><a href="#2、camellia-练习" class="headerlink" title="2、camellia-练习"></a>2、camellia-练习</h3><p>这个题也一样，把近跳转nop掉之后，再把下面的那段按d看机器码更方便</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337040.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里就是要nop掉的，call 0h类型</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337415.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>如果看不出来也可以把这一小段按c强制编译看汇编，这里就是花指令，nop掉</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336973.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后再把剩下的那一段按c强制编译，没啥问题，已经除掉花了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336957.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>然后f5看伪代码，发现这里的加密函数位置还有无法编译的花指令</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022337991.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>进入那个函数，还是一样的思路，nop掉之后反编译就能看到代码了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/49880193/1748265732620-495077ac-5273-4746-a822-da72ef0d50f0.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这就是主要的tea加密算法，解密就行</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/picture-bed@image/image/202506022336945.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 
                 
               </div>
@@ -342,6 +349,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AD%A6%E4%B9%A0/" class="print-no-link">#学习</a>
+      
+    </div>
+  
 </div>
 
 
@@ -350,8 +364,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>unity逆向il2cpp打包</div>
-      <div>https://j1nxem-o.github.io/2025/05/29/unity逆向il2cpp打包/</div>
+      <div>花指令-近跳转和call0h型</div>
+      <div>https://j1nxem-o.github.io/2025/06/02/花指令-近跳转和call0h型/</div>
     </div>
     <div class="license-meta">
       
@@ -363,13 +377,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年5月29日</div>
+          <div>2025年6月2日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年5月29日</div>
+          <div>2025年6月2日</div>
         </div>
       
       
@@ -400,15 +414,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/06/02/%E8%8A%B1%E6%8C%87%E4%BB%A4-%E8%BF%91%E8%B7%B3%E8%BD%AC%E5%92%8Ccall0h%E5%9E%8B/" title="花指令-近跳转和call0h型">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">花指令-近跳转和call0h型</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/" title="unity逆向il2cpp打包">
+                        <span class="hidden-mobile">unity逆向il2cpp打包</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
