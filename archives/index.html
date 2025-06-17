@@ -207,6 +207,7 @@
 
       
     </div>
+  
   </div>
 </div>
 
@@ -226,7 +227,7 @@
                 
 
 <div class="list-group">
-  <p class="h4">共计 3 篇文章</p>
+  <p class="h4">共计 2 篇文章</p>
   <hr>
   
   
@@ -243,12 +244,6 @@
     <a href="/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/" class="list-group-item list-group-item-action">
       <time>05-29</time>
       <div class="list-group-item-title">unity逆向il2cpp打包</div>
-    </a>
-  
-    
-    <a href="/2025/05/27/%E8%8A%B1%E6%8C%87%E4%BB%A4/" class="list-group-item list-group-item-action">
-      <time>05-27</time>
-      <div class="list-group-item-title">花指令</div>
     </a>
   
 </div>
@@ -299,6 +294,38 @@
 
   <footer>
     <div class="footer-inner">
+  <div>
+  <span id="timeDate">正在载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("08/17/2020 00:00:00");
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀已持续航行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
   
     <div class="footer-content">
        <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
@@ -386,6 +413,10 @@
   <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
 
 
+
+
+  
+<script src="https://static.kevinchu.top/blog/assets/js/stars.js"></script>
 
 
 
