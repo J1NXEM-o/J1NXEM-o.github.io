@@ -36,7 +36,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508261242020.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508261242982.png">
 <meta property="article:published_time" content="2025-08-26T04:40:14.000Z">
-<meta property="article:modified_time" content="2025-08-26T04:43:07.067Z">
+<meta property="article:modified_time" content="2025-08-26T04:45:58.778Z">
 <meta property="article:author" content="J1NXEM">
 <meta property="article:tag" content="ctf-reverse-wp">
 <meta name="twitter:card" content="summary_large_image">
@@ -307,7 +307,7 @@
               <p id="updated-time" class="note note-info" style="display: none">
                 
                   
-                    本文最后更新于 2025-08-26T12:43:07+08:00
+                    本文最后更新于 2025-08-26T12:45:58+08:00
                   
                   
 
@@ -332,7 +332,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs python">CMP_DATA = [<br>    <span class="hljs-number">0x1A</span>,<span class="hljs-number">0x1E</span>,<span class="hljs-number">0x1D</span>,<span class="hljs-number">0x0E</span>,<span class="hljs-number">0x1C</span>,<span class="hljs-number">0x13</span>,<span class="hljs-number">0x25</span>,<span class="hljs-number">0x0E</span>,<span class="hljs-number">0x78</span>,<span class="hljs-number">0x3B</span>,<span class="hljs-number">0x31</span>,<span class="hljs-number">0x3F</span>,<span class="hljs-number">0x68</span>,<span class="hljs-number">0x45</span>,<span class="hljs-number">0x23</span>,<span class="hljs-number">0x3D</span>,<br>    <span class="hljs-number">0x0F</span>,<span class="hljs-number">0x45</span>,<span class="hljs-number">0x37</span>,<span class="hljs-number">0x3A</span>,<span class="hljs-number">0x3A</span>,<span class="hljs-number">0x70</span>,<span class="hljs-number">0x07</span>,<span class="hljs-number">0x81</span>,<span class="hljs-number">0x1A</span>,<span class="hljs-number">0x2A</span>,<span class="hljs-number">0x3D</span>,<span class="hljs-number">0x7E</span>,<span class="hljs-number">0x7D</span>,<span class="hljs-number">0x3C</span>,<span class="hljs-number">0x09</span>,<span class="hljs-number">0x82</span>,<br>    <span class="hljs-number">0x39</span>,<span class="hljs-number">0x2A</span>,<span class="hljs-number">0x0E</span>,<span class="hljs-number">0x7E</span>,<span class="hljs-number">0x09</span>,<span class="hljs-number">0x32</span>,<span class="hljs-number">0x19</span>,<span class="hljs-number">0x81</span>,<span class="hljs-number">0x0C</span>,<span class="hljs-number">0x2A</span>,<span class="hljs-number">0x68</span>,<span class="hljs-number">0x45</span>,<span class="hljs-number">0x09</span>,<span class="hljs-number">0x43</span>,<span class="hljs-number">0x3B</span>,<span class="hljs-number">0x70</span>,<br>    <span class="hljs-number">0x4F</span>,<span class="hljs-number">0x4C</span>,<span class="hljs-number">0x00</span>,<span class="hljs-number">0x00</span><br>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">inv_even</span>(<span class="hljs-params">v</span>):  <br>    <span class="hljs-keyword">return</span> ((v ^ <span class="hljs-number">0x53</span>) + <span class="hljs-number">5</span>) &amp; <span class="hljs-number">0xFF</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">inv_odd</span>(<span class="hljs-params">v</span>):   <br>    <span class="hljs-keyword">return</span> (((v - <span class="hljs-number">14</span>) &amp; <span class="hljs-number">0xFF</span>) ^ <span class="hljs-number">0x43</span>) &amp; <span class="hljs-number">0xFF</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">solve</span>():<br>    res = <span class="hljs-built_in">bytearray</span>()<br>    <span class="hljs-keyword">for</span> i, v <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(CMP_DATA[:<span class="hljs-number">50</span>]):<br>        res.append(inv_even(v) <span class="hljs-keyword">if</span> i%<span class="hljs-number">2</span>==<span class="hljs-number">0</span> <span class="hljs-keyword">else</span> inv_odd(v))<br>    s = <span class="hljs-built_in">bytes</span>(res)<br>    <span class="hljs-built_in">print</span>(s.decode(<span class="hljs-string">&quot;latin1&quot;</span>))<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    solve()<br>NSSCTF&#123;C0ngr@tulation!Y0N_s33m_7o_b3_gO0d_@t_vm!!&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="CrackMe-F-Me"><a href="#CrackMe-F-Me" class="headerlink" title="CrackMe&amp;F***Me"></a>CrackMe&amp;F***Me</h2><p>也是第一次遇到这种题捏，好好学习学习</p>
-<p>先用010将文件末尾改为MEI魔数，**(**“MEI 魔术”是指 <strong>PyInstaller 打包后的 Windows 可执行文件头部的标记)</strong></p>
+<p>先用010将文件末尾改为MEI魔数，**(“MEI 魔术”是指 PyInstaller 打包后的 Windows 可执行文件头部的标记)**</p>
 <p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508261242911.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>直接解包会出错，只能解包部分，主要的函数无法解包，这里可以推测可能是对压缩部分有魔改的加密，可以将没有解包的部分内容提取出来，最后单独处理</p>
 <p>这里我给出修改后的pyinstxtractor.py，这个脚本可以解包并且将没有解包成功的部分初始内容提取出来</p>
@@ -456,6 +456,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/08/28/LILCTF2025%E9%80%86%E5%90%91%E9%A2%98%E8%A7%A3/" title="LILCTF2025逆向题解">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">LILCTF2025逆向题解</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

