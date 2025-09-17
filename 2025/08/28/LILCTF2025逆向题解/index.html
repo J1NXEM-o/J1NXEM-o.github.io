@@ -17,7 +17,7 @@
   
   <meta name="theme-color" content="#4F4F4F">
   <meta name="author" content="J1NXEM">
-  <meta name="keywords" content="Hexo, blog, J1NXEM">
+  <meta name="keywords" content="zh-CN">
   
     <meta name="description" content="LILCTF 2025ARM ASM先用jadx看，找到密文  反编译so文件，找到主函数，这里一共分为三处加密，第一处通过t表进行重新排列和按位xor，第二处对每三字节进行左循环移3位，右循环移1位，不变的变换，第三处用base64变表的加密  这里可以找到t表的内容  将以上加密过程逆过来写解密 1234567891011121314151617181920212223242526272829">
 <meta property="og:type" content="article">
@@ -556,6 +556,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2025/09/17/1/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
