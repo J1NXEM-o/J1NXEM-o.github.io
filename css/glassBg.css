@@ -1,0 +1,21 @@
+/* === 主内容区域毛玻璃背景（与右侧目录栏一致）=== */
+#board {
+  background-color: var(--board-bg-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+}
+
+/* === 目录栏（右侧）毛玻璃样式 === */
+#toc {
+  padding: 10px;
+  top: 4rem;
+  background-color: var(--board-bg-color);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  transition: all 0.3s ease;
+}

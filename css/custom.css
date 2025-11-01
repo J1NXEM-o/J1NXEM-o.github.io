@@ -1,0 +1,29 @@
+/* 目录栏整体样式（右侧 toc） */
+#toc {
+  background-color: rgba(255, 255, 255, 0.2); /* 白色半透背景 */
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px); /* 毛玻璃模糊 */
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 柔和阴影 */
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+/* 悬停时增强玻璃感 */
+#toc:hover {
+  background-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 目录文字样式 */
+#toc a {
+  color: #000; /* 白色文字 */
+  font-weight: 500;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3); /* 提高在玻璃背景下的可读性 */
+  transition: color 0.3s;
+}
+
+/* 鼠标悬停在目录链接时的颜色变化 */
+#toc a:hover {
+  color: #72ffb7; /* 浅绿色高亮（你可以换成任何喜欢的颜色） */
+}

@@ -303,4 +303,59 @@
   
   
   
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[const cards = document.querySelectorAll(".index-card");if (cards.length) {  document.querySelector(".row").setAttribute("style", "overflow: hidden;");  const coefficient = document.documentElement.clientWidth > 768 ? 0.5 : 0.3;  const origin =    document.documentElement.clientHeight -    cards[0].getBoundingClientRect().height * coefficient;  function throttle(fn, wait) {    let timer = null;    return function () {      const context = this;      const args = arguments;      if (!timer) {        timer = setTimeout(function () {          fn.apply(context, args);          timer = null;        }, wait);      }    };  }  function handle() {    cards.forEach((card) => {      card.setAttribute(        "style",        `--state: ${card.getBoundingClientRect().top - origin < 0 ? 1 : 0};`      );    });    console.log(1);  }  document.addEventListener("scroll", throttle(handle, 100));}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.index-card {  transition: all 0.5s;  transform: scale(calc(1.5 - 0.5 * var(--state)));  opacity: var(--state);  margin-bottom: 2rem;}.index-img img {  margin: 20px 0;}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[a.card-body.hover-with-bg {  border-left: 5px solid rgba(255, 255, 255, 0.6); /* 白色半透 */  background: #00000080; /* 半透明黑背景 */  color: #fff;  box-shadow: 0 5px 10px #00000050;  transition: all 0.5s;}a.card-body.hover-with-bg img {  transition: all 5s;  border: 2px solid #fff;}a.card-body.hover-with-bg:hover img {  transform: rotate(1080deg);}.link-intro {  color: #293239;  font-weight: 600;  font-family: auto;}a.card-body.hover-with-bg:hover {  border-left-width: 15px;  border-left-color: rgba(255, 255, 255, 0.8); /* 悬停时稍微更亮一点 */  background-color: #fff;  color: #000; /* 白底时切换为黑字可读性更好 */}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[/* 目录栏整体样式（右侧 toc） */#toc {  background-color: rgba(255, 255, 255, 0.2); /* 白色半透背景 */  -webkit-backdrop-filter: blur(25px);  backdrop-filter: blur(25px); /* 毛玻璃模糊 */  border-radius: 12px;  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* 柔和阴影 */  padding: 15px;  transition: all 0.3s ease;}/* 悬停时增强玻璃感 */#toc:hover {  background-color: rgba(255, 255, 255, 0.35);  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);}/* 目录文字样式 */#toc a {  color: #000; /* 白色文字 */  font-weight: 500;  text-shadow: 0 0 4px rgba(0, 0, 0, 0.3); /* 提高在玻璃背景下的可读性 */  transition: color 0.3s;}/* 鼠标悬停在目录链接时的颜色变化 */#toc a:hover {  color: #72ffb7; /* 浅绿色高亮（你可以换成任何喜欢的颜色） */}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[/* === 主内容区域毛玻璃背景（与右侧目录栏一致）=== */#board {  background-color: var(--board-bg-color);  border-radius: 15px;  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);  -webkit-backdrop-filter: blur(15px);  backdrop-filter: blur(15px);  transition: all 0.3s ease;}/* === 目录栏（右侧）毛玻璃样式 === */#toc {  padding: 10px;  top: 4rem;  background-color: var(--board-bg-color);  border-radius: 15px;  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);  -webkit-backdrop-filter: blur(15px);  backdrop-filter: blur(15px);  transition: all 0.3s ease;}]]></content>
+    
+  </entry>
+  
+  
+  
 </search>
