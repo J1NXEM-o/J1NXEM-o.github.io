@@ -22,7 +22,7 @@
     <meta name="description" content="ooo你怎么这么菜">
 <meta property="og:type" content="website">
 <meta property="og:title" content="J1NXEM&#39;s blog">
-<meta property="og:url" content="https://j1nxem-o.github.io/page/2/index.html">
+<meta property="og:url" content="https://j1nxem-o.github.io/page/3/index.html">
 <meta property="og:site_name" content="J1NXEM&#39;s blog">
 <meta property="og:description" content="ooo你怎么这么菜">
 <meta property="og:locale" content="zh_CN">
@@ -369,15 +369,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2025/08/28/LILCTF2025%E9%80%86%E5%90%91%E9%A2%98%E8%A7%A3/" target="_self">
-          LILCTF2025逆向题解
+        <a href="/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/" target="_self">
+          unity逆向il2cpp打包
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/28/LILCTF2025%E9%80%86%E5%90%91%E9%A2%98%E8%A7%A3/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2025/05/29/unity%E9%80%86%E5%90%91il2cpp%E6%89%93%E5%8C%85/" target="_self">
         <div>
-          LILCTF 2025ARM ASM先用jadx看，找到密文  反编译so文件，找到主函数，这里一共分为三处加密，第一处通过t表进行重新排列和按位xor，第二处对每三字节进行左循环移3位，右循环移1位，不变的变换，第三处用base64变表的加密  这里可以找到t表的内容  将以上加密过程逆过来写解密 1234567891011121314151617181920212223242526272829
+          unity逆向-il2cppLitCTF 2025-Robbie Wanna Revengeil2cpp打包的unity游戏题，在网上搜了文章， 根据晓梦的文章https://xz.aliyun.com/news/15811 和swdd的文章https://blog.csdn.net/qq_24481913/article/details/148234091?sharetype=blogdetai
         </div>
       </a>
 
@@ -385,313 +385,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-28 01:49" pubdate>
-              2025-08-28
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ctf-reverse-wp/">#ctf-reverse-wp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/26/NSSCTF-4th/" target="_self">
-          NSSCTF-4th
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/26/NSSCTF-4th/" target="_self">
-        <div>
-          Reversecheckit先用jadx看，关键逻辑在native层的so文件   反编译libcheck.so文件，在Java_com_test_ezre_MainActivity_checkInput函数发现了主要函数实现exec 点进去看发现是vm的实现  主要逻辑  code 在 7→45 这一段每轮处理 两个字符 并把变换结果依次 PUSH 到栈里；然后 50→52 跳到比较循环，按从后
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-26 12:40" pubdate>
-              2025-08-26
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ctf-reverse-wp/">#ctf-reverse-wp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/16/%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A82025%E5%88%9D%E8%B5%9B%E9%80%86%E5%90%91wp/" target="_self">
-          磐石行动2025初赛逆向wp
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/16/%E7%A3%90%E7%9F%B3%E8%A1%8C%E5%8A%A82025%E5%88%9D%E8%B5%9B%E9%80%86%E5%90%91wp/" target="_self">
-        <div>
-          磐石行动初赛2025逆向wpMy-key有好几处反调试，可以交叉引用   调试时改zf  sub_1400040A0是主函数位置，sub_140003A40是一个主要加密函数，动调的时候可以看到密钥的使用  sub_140003840是一个自定义的类似tea加密的函数，其实是rc6的加密方式， v37[j] &#x3D; v36[j] ^ *v8;这里是对key的xor  密钥可以通过动调得到，但
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-16 17:48" pubdate>
-              2025-08-16
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ctf-reverse-wp/">#ctf-reverse-wp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/13/Justctf2025/" target="_self">
-          Justctf2025
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/13/Justctf2025/" target="_self">
-        <div>
-          Satellite一道misc+re的题 给了一个流量包，直接wireshark分析，这一行非常清楚的flag字样，点击看到了text，猜测是密文  {“text”:  “5771D410  CFFE844D24B50FCB  BBDC1973A7A935E5  C3468242950DFCCE  94794B067F876A21  5D96EE09”}  可以通过查找字符串，找到相关语句，然后交
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-13 00:30" pubdate>
-              2025-08-13
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ctf-reverse-wp/">#ctf-reverse-wp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/08/02/L3Hctf%E9%83%A8%E5%88%86wp/" target="_self">
-          L3Hctf部分wp
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/08/02/L3Hctf%E9%83%A8%E5%88%86wp/" target="_self">
-        <div>
-          TemporalParadox写这一题用了快半天的时间www，反正得先把函数都理解透了才行 先找到主函数入口，有一个花指令，nop掉之后反编译 这里直接跳转，中间插入的就是花指令   注意，以下函数运行在所给的时间节点下v61 &gt; 1751990400 &amp;&amp; v61 &lt;&#x3D; 1752052051，主要看sub_140001963函数  具体分析看注释  大概就是
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-08-02 09:29" pubdate>
-              2025-08-02
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/ctf-reverse-wp/">#ctf-reverse-wp</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2025/06/02/%E8%8A%B1%E6%8C%87%E4%BB%A4-%E8%BF%91%E8%B7%B3%E8%BD%AC%E5%92%8Ccall0h%E5%9E%8B/" target="_self">
-          花指令-近跳转和call0h型
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2025/06/02/%E8%8A%B1%E6%8C%87%E4%BB%A4-%E8%BF%91%E8%B7%B3%E8%BD%AC%E5%92%8Ccall0h%E5%9E%8B/" target="_self">
-        <div>
-          根据https://xz.aliyun.com/news/14062 这位师傅的文章学习来的 这两道题目的花指令都是近跳转和call 0h型  1、LitCTF 2025 | easy_tea直接shift+f2找到主要的加密位置，然后看到花，把这个近跳转nop，然后下面的函数按d转为机器码，有好几处花，都直接nop掉  然后一整个部分再按p识别成函数，然后f5，  这里主tea加密部分仍然看不到
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2025-06-02 23:35" pubdate>
-              2025-06-02
+            <time datetime="2025-05-29 11:24" pubdate>
+              2025-05-29
             </time>
           </div>
         
@@ -721,7 +416,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E8%8A%B1%E6%8C%87%E4%BB%A4/">#花指令</a>
+              <a href="/tags/unity%E9%80%86%E5%90%91/">#unity逆向</a>
             
           </div>
         
@@ -733,7 +428,7 @@
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/3/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span>
     </span>
   </nav>
 

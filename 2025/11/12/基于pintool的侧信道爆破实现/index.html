@@ -1,0 +1,827 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tubiao.png">
+  <link rel="icon" href="/img/tubiao.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#4F4F4F">
+  <meta name="author" content="J1NXEM">
+  <meta name="keywords" content="zh-CN">
+  
+    <meta name="description" content="​    vm    单字节加密    侧信道爆破   pintool安装……题目来源第八届“强网”拟态防御国际精英挑战赛_hyperjump">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于pintool的侧信道爆破实现">
+<meta property="og:url" content="https://j1nxem-o.github.io/2025/11/12/%E5%9F%BA%E4%BA%8Epintool%E7%9A%84%E4%BE%A7%E4%BF%A1%E9%81%93%E7%88%86%E7%A0%B4%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="J1NXEM&#39;s blog">
+<meta property="og:description" content="​    vm    单字节加密    侧信道爆破   pintool安装……题目来源第八届“强网”拟态防御国际精英挑战赛_hyperjump">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202511122053033.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202511122119173.png">
+<meta property="article:published_time" content="2025-11-12T12:41:13.000Z">
+<meta property="article:modified_time" content="2025-11-12T13:23:09.640Z">
+<meta property="article:author" content="J1NXEM">
+<meta property="article:tag" content="侧信道爆破">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202511122053033.png">
+<meta name="twitter:creator" content="@J1NXEM">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>基于pintool的侧信道爆破实现 - J1NXEM&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/links.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"j1nxem-o.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2025-04-25T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>J1NXEM’s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/wenzhang.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="基于pintool的侧信道爆破实现"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        J1NXEM
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-11-12 20:41" pubdate>
+          2025年11月12日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">基于pintool的侧信道爆破实现</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2025-11-12T21:23:09+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>​    vm    单字节加密    侧信道爆破   pintool安装……<br>题目来源第八届“强网”拟态防御国际精英挑战赛_hyperjump</p>
+<span id="more"></span>
+
+<p>这里我是根据这个师傅的文章来安装pintool的：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/level5uiharu/p/16963907.html">欢迎回来(。・∀・)ノ</a></p>
+<p>同时我看了swdd的文章[<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-281796.htm">原创]基于 Frida 对单字节加密验证程序侧信道爆破-CTF对抗-看雪论坛-安全社区|非营利性质技术交流社区</a></p>
+<p>以及butterfly师傅的文章：<a target="_blank" rel="noopener" href="https://buutt3rf1y.github.io/2025/10/31/%E7%AC%AC%E5%85%AB%E5%B1%8A%E2%80%9C%E5%BC%BA%E7%BD%91%E2%80%9D%E6%8B%9F%E6%80%81%E9%98%B2%E5%BE%A1%E5%9B%BD%E9%99%85%E7%B2%BE%E8%8B%B1%E6%8C%91%E6%88%98%E8%B5%9B/#Reverse">(｡･ω･｡)泥嚎</a></p>
+<hr>
+<p>bm类型题，flag长度为24，这里加密一次存入byte_5420[n23_1]后进行比较，是单字节加密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202511122053033.png" srcset="/img/loading.gif" lazyload alt="image-20251112205324919"></p>
+<p>此时就可以用到pintool来进行侧信道爆破。</p>
+<hr>
+<p>这里我看到了有的师傅用时间来爆破（时序侧信道爆破），不过爆破的结果不稳定，会出现错误，我就没有用这种方法去尝试，不过后续准备试试。</p>
+<hr>
+<p>Intel Pin：动态二进制插桩，在不修改源代码、不重新编译程序的情况下，对二进制可执行文件进行运行时插桩，以便分析程序的执行过程。在侧信道研究方面，统计指令数量、分支次数、缓存访问等特征。</p>
+<p>思路是通过 PinTool 收集程序在不同输入下执行的指令数，通过判断差异来爆破。</p>
+<p>指定 Pin 可执行文件和计数工具 inscount0.s，该 .so 会统计程序执行的总指令数并输出到 inscount.out。</p>
+<p>注意限制flag{}，不然最后爆破最后一位会出现错误。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#!/usr/bin/env python3</span><br><span class="hljs-keyword">import</span> re<br><span class="hljs-keyword">import</span> string<br><span class="hljs-keyword">import</span> sys<br><span class="hljs-keyword">import</span> os<br><span class="hljs-keyword">import</span> subprocess<br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br>TARGET_BINARY = os.path.abspath(<span class="hljs-string">&#x27;./hyperjump&#x27;</span>)<br>FLAG_LEN = <span class="hljs-number">24</span><br><span class="hljs-comment"># 固定前缀和后缀</span><br>FLAG_PREFIX = <span class="hljs-string">&quot;flag&#123;&quot;</span><br>FLAG_SUFFIX = <span class="hljs-string">&quot;&#125;&quot;</span><br><br>START_INDEX = <span class="hljs-built_in">len</span>(FLAG_PREFIX)<br><br>PIN_ROOT = <span class="hljs-string">&#x27;/home/kali/Desktop/pintools/pin-external-4.0-linux&#x27;</span><br>PIN_TOOL_PATH = os.path.abspath(os.path.join(PIN_ROOT, <span class="hljs-string">&#x27;source/tools/ManualExamples/obj-intel64/inscount0.so&#x27;</span>))<br><br>PIN_CMD_LIST = [os.path.join(PIN_ROOT, <span class="hljs-string">&#x27;pin&#x27;</span>), <span class="hljs-string">&#x27;-t&#x27;</span>, PIN_TOOL_PATH, <span class="hljs-string">&#x27;--&#x27;</span>, TARGET_BINARY]<br><br>CHARSET = string.ascii_lowercase + string.digits + <span class="hljs-string">&quot;_@&#123;&#125;&quot;</span><br><br>context.log_level = <span class="hljs-string">&#x27;info&#x27;</span><br><br>dates = [<span class="hljs-string">&#x27;inscount.out&#x27;</span>, <span class="hljs-string">&#x27;inscount.txt&#x27;</span>, <span class="hljs-string">&#x27;pin.out&#x27;</span>]<br>    <span class="hljs-keyword">for</span> name <span class="hljs-keyword">in</span> candidates:<br>        path = os.path.join(workdir <span class="hljs-keyword">if</span> workdir <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;.&#x27;</span>, name)<br>        <span class="hljs-keyword">if</span> os.path.exists(path):<br>            <span class="hljs-keyword">try</span>:<br>                <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(path, <span class="hljs-string">&#x27;r&#x27;</span>, encoding=<span class="hljs-string">&#x27;utf-8&#x27;</span>, errors=<span class="hljs-string">&#x27;ignore&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>                    data = f.read()<br>                m = re.search(<span class="hljs-string">r&#x27;(\d+)\s+instructions&#x27;</span>, data)<br>                <span class="hljs-keyword">if</span> m:<br>                    <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(m.group(<span class="hljs-number">1</span>)), data<br>                m2 = re.search(<span class="hljs-string">r&#x27;(\d+)&#x27;</span>, data)<br>                <span class="hljs-keyword">if</span> m2:<br>                    <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(m2.group(<span class="hljs-number">1</span>)), data<br>            <span class="hljs-keyword">except</span> Exception:<br>                <span class="hljs-keyword">pass</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_inscount</span>(<span class="hljs-params">payload: <span class="hljs-built_in">bytes</span></span>) -&gt; <span class="hljs-built_in">int</span>:<br>    IO_TIMEOUT = <span class="hljs-number">5</span><br>    log.info(<span class="hljs-string">f&quot;Testing payload: <span class="hljs-subst">&#123;payload.decode(<span class="hljs-string">&#x27;latin-1&#x27;</span>)[:START_INDEX+<span class="hljs-number">1</span>]&#125;</span>...&quot;</span>)<br><br>    <span class="hljs-keyword">try</span>:<br>        proc = subprocess.run(<br>            PIN_CMD_LIST,<br>            <span class="hljs-built_in">input</span>=payload.decode(<span class="hljs-string">&#x27;latin-1&#x27;</span>) + <span class="hljs-string">&#x27;\n&#x27;</span>,<br>            capture_output=<span class="hljs-literal">True</span>,<br>            timeout=IO_TIMEOUT,<br>            text=<span class="hljs-literal">True</span>,<br>            cwd=<span class="hljs-string">&#x27;.&#x27;</span><br>        )<br><br>        stdout = proc.stdout <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;&quot;</span><br>        stderr = proc.stderr <span class="hljs-keyword">or</span> <span class="hljs-string">&quot;&quot;</span><br>        exitcode = proc.returncode<br><br>        sys.stderr.write(<span class="hljs-string">f&quot;\n--- Pin Tool 完整输出 (Exit Code <span class="hljs-subst">&#123;exitcode&#125;</span>): ---\n&quot;</span>)<br>        <span class="hljs-keyword">if</span> stdout.strip():<br>            sys.stderr.write(<span class="hljs-string">&quot;[stdout]\n&quot;</span> + stdout.strip() + <span class="hljs-string">&quot;\n&quot;</span>)<br>        <span class="hljs-keyword">if</span> stderr.strip():<br>            sys.stderr.write(<span class="hljs-string">&quot;[stderr]\n&quot;</span> + stderr.strip() + <span class="hljs-string">&quot;\n&quot;</span>)<br>        sys.stderr.write(<span class="hljs-string">&quot;--------------------------------------------------\n&quot;</span>)<br><br>        combined = stdout + <span class="hljs-string">&quot;\n&quot;</span> + stderr<br><br>        match_re = re.search(<span class="hljs-string">r&#x27;(\d+)\s+instructions&#x27;</span>, combined, re.IGNORECASE)<br>        <span class="hljs-keyword">if</span> match_re:<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(match_re.group(<span class="hljs-number">1</span>))<br><br>        lines = combined.strip().splitlines()<br>        <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> <span class="hljs-built_in">reversed</span>(lines):<br>            s = line.strip()<br>            <span class="hljs-keyword">if</span> s.isdigit():<br>                <span class="hljs-keyword">return</span> <span class="hljs-built_in">int</span>(s)<br><br>        file_count, file_content = read_inscount_outfile(workdir=<span class="hljs-string">&#x27;.&#x27;</span>)<br>        <span class="hljs-keyword">if</span> file_count <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>            <span class="hljs-keyword">try</span>:<br>                os.remove(<span class="hljs-string">&#x27;inscount.out&#x27;</span>)<br>            <span class="hljs-keyword">except</span> Exception:<br>                <span class="hljs-keyword">pass</span><br>            <span class="hljs-keyword">return</span> file_count<br><br>        low = combined.lower()<br>        <span class="hljs-keyword">if</span> exitcode <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span> <span class="hljs-keyword">and</span> exitcode != <span class="hljs-number">0</span>:<br>            <span class="hljs-keyword">if</span> <span class="hljs-built_in">any</span>(k <span class="hljs-keyword">in</span> low <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> [<span class="hljs-string">&#x27;nope&#x27;</span>, <span class="hljs-string">&#x27;try again&#x27;</span>, <span class="hljs-string">&#x27;wrong&#x27;</span>, <span class="hljs-string">&#x27;incorrect&#x27;</span>]):<br>                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>            <span class="hljs-keyword">if</span> stderr.strip():<br>                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br>        <span class="hljs-keyword">if</span> exitcode == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> <span class="hljs-built_in">any</span>(k <span class="hljs-keyword">in</span> low <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> [<span class="hljs-string">&#x27;flag&#x27;</span>, <span class="hljs-string">&#x27;correct&#x27;</span>, <span class="hljs-string">&#x27;congrats&#x27;</span>, <span class="hljs-string">&#x27;success&#x27;</span>]):<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">10</span>**<span class="hljs-number">9</span><br><br>        log.warning(<span class="hljs-string">&quot;无法从 Pin 输出或文件中解析到指令数（stdout/stderr/file 均无数字）。&quot;</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">except</span> subprocess.TimeoutExpired <span class="hljs-keyword">as</span> te:<br>        sys.stderr.write(<span class="hljs-string">f&quot;[TIMEOUT] Pin 运行超时: <span class="hljs-subst">&#123;te&#125;</span>\n&quot;</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>    <span class="hljs-keyword">except</span> FileNotFoundError <span class="hljs-keyword">as</span> fe:<br>        sys.stderr.write(<span class="hljs-string">f&quot;[FATAL] 找不到 pin 可执行文件或路径错误: <span class="hljs-subst">&#123;fe&#125;</span>\n&quot;</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br>    <span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>        sys.stderr.write(<span class="hljs-string">f&quot;[FATAL ERROR] get_inscount 发生错误: <span class="hljs-subst">&#123;e&#125;</span>\n&quot;</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">main</span>():<br>    <span class="hljs-comment"># 初始化 known_flag，并把 prefix/suffix 固定上去</span><br>    <span class="hljs-keyword">if</span> FLAG_LEN &lt; <span class="hljs-built_in">len</span>(FLAG_PREFIX) + <span class="hljs-built_in">len</span>(FLAG_SUFFIX):<br>        log.critical(<span class="hljs-string">&quot;FLAG_LEN 太短，不能容纳 prefix 和 suffix&quot;</span>)<br>        <span class="hljs-keyword">return</span><br><br>    known_flag = <span class="hljs-built_in">list</span>(<span class="hljs-string">&quot;A&quot;</span> * FLAG_LEN)<br>    <span class="hljs-comment"># 固定前缀</span><br>    <span class="hljs-keyword">for</span> i, ch <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(FLAG_PREFIX):<br>        known_flag[i] = ch<br>    <span class="hljs-comment"># 固定后缀（最后一位）</span><br>    known_flag[-<span class="hljs-number">1</span>] = FLAG_SUFFIX<br><br>    fixed_positions = <span class="hljs-built_in">set</span>(<span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(FLAG_PREFIX))) | &#123;FLAG_LEN - <span class="hljs-number">1</span>&#125;<br>    try_positions = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>, FLAG_LEN) <span class="hljs-keyword">if</span> i <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> fixed_positions <span class="hljs-keyword">and</span> i &gt;= START_INDEX]<br><br>    log.info(<span class="hljs-string">f&quot;开始爆破，长度 <span class="hljs-subst">&#123;FLAG_LEN&#125;</span>，字符集大小 <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(CHARSET)&#125;</span>，从索引 <span class="hljs-subst">&#123;START_INDEX&#125;</span> 开始。&quot;</span>)<br>    log.info(<span class="hljs-string">f&quot;固定前缀: &#x27;<span class="hljs-subst">&#123;FLAG_PREFIX&#125;</span>&#x27;，固定后缀: &#x27;<span class="hljs-subst">&#123;FLAG_SUFFIX&#125;</span>&#x27;。将尝试位置: <span class="hljs-subst">&#123;try_positions&#125;</span>&quot;</span>)<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(TARGET_BINARY):<br>        log.critical(<span class="hljs-string">f&quot;目标文件不存在: <span class="hljs-subst">&#123;TARGET_BINARY&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">return</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(PIN_TOOL_PATH):<br>        log.critical(<span class="hljs-string">f&quot;Pin Tool 不存在: <span class="hljs-subst">&#123;PIN_TOOL_PATH&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">return</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> os.path.exists(PIN_CMD_LIST[<span class="hljs-number">0</span>]):<br>        log.critical(<span class="hljs-string">f&quot;Pin 可执行文件不存在: <span class="hljs-subst">&#123;PIN_CMD_LIST[<span class="hljs-number">0</span>]&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">return</span><br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> try_positions:<br>        log.info(<span class="hljs-string">f&quot;\n&gt;&gt;&gt;&gt; 正在爆破第 <span class="hljs-subst">&#123;i&#125;</span> 位...&quot;</span>)<br><br>        max_count = <span class="hljs-number">0</span><br>        best_char = <span class="hljs-literal">None</span><br><br>        <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> CHARSET:<br>            current_test = known_flag[:]<br>            current_test[i] = char<br>            payload = <span class="hljs-string">&quot;&quot;</span>.join(current_test).encode(<span class="hljs-string">&#x27;latin-1&#x27;</span>)<br><br>            count = get_inscount(payload)<br><br>            <span class="hljs-keyword">if</span> count == <span class="hljs-number">0</span>:<br>                <span class="hljs-keyword">continue</span><br><br>            <span class="hljs-keyword">if</span> count &gt; max_count:<br>                max_count = count<br>                best_char = char<br>                log.info(<span class="hljs-string">f&quot;发现新的最大值: 字符 &#x27;<span class="hljs-subst">&#123;best_char&#125;</span>&#x27; -&gt; <span class="hljs-subst">&#123;max_count&#125;</span> 条指令&quot;</span>)<br><br>        <span class="hljs-keyword">if</span> best_char:<br>            known_flag[i] = best_char<br>            log.success(<span class="hljs-string">f&quot;第 <span class="hljs-subst">&#123;i&#125;</span> 位确定为: &#x27;<span class="hljs-subst">&#123;best_char&#125;</span>&#x27;&quot;</span>)<br>            log.success(<span class="hljs-string">f&quot;当前 Flag: <span class="hljs-subst">&#123;<span class="hljs-string">&#x27;&#x27;</span>.join(known_flag)&#125;</span>&quot;</span>)<br>        <span class="hljs-keyword">else</span>:<br>            log.warning(<span class="hljs-string">f&quot;第 <span class="hljs-subst">&#123;i&#125;</span> 位爆破失败。所有字符返回 0。&quot;</span>)<br>            <span class="hljs-keyword">break</span><br><br>    <span class="hljs-comment"># 最后确保后缀是 &#x27;&#125;&#x27;</span><br>    known_flag[-<span class="hljs-number">1</span>] = FLAG_SUFFIX<br><br>    log.success(<span class="hljs-string">f&quot;\n--- 爆破完成 ---&quot;</span>)<br>    log.success(<span class="hljs-string">f&quot;最终 Flag: <span class="hljs-subst">&#123;<span class="hljs-string">&#x27;&#x27;</span>.join(known_flag)&#125;</span>&quot;</span>)<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&#x27;__main__&#x27;</span>:<br>    main()<br><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202511122119173.png" srcset="/img/loading.gif" lazyload alt="image-20251112211945106"></p>
+<p>flag{m4z3d_vm_jump5__42}</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/reverse-%E6%8E%A2%E7%B4%A2%E7%9A%84%E8%BF%87%E7%A8%8B/" class="category-chain-item">reverse-探索的过程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E4%BE%A7%E4%BF%A1%E9%81%93%E7%88%86%E7%A0%B4/" class="print-no-link">#侧信道爆破</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>基于pintool的侧信道爆破实现</div>
+      <div>https://j1nxem-o.github.io/2025/11/12/基于pintool的侧信道爆破实现/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>J1NXEM</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年11月12日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年11月12日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/09/%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982025%E9%80%86%E5%90%91%E9%83%A8%E5%88%86%E9%A2%98%E8%A7%A3/" title="极客大挑战2025逆向部分题解">
+                        <span class="hidden-mobile">极客大挑战2025逆向部分题解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"https://imagegoo-twikoo.hf.space","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <div>
+  <span id="timeDate">正在载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("01/09/2025 00:00:00");
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀已持续航行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>
