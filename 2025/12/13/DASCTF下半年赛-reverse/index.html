@@ -1,0 +1,889 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tubiao.png">
+  <link rel="icon" href="/img/tubiao.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#4F4F4F">
+  <meta name="author" content="J1NXEM">
+  <meta name="keywords" content="zh-CN">
+  
+    <meta name="description" content="DASCTF2025下半年比赛逆向题。前一阵子一直在复习备考，没及时更新~~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DASCTF下半年赛_reverse">
+<meta property="og:url" content="https://j1nxem-o.github.io/2025/12/13/DASCTF%E4%B8%8B%E5%8D%8A%E5%B9%B4%E8%B5%9B-reverse/index.html">
+<meta property="og:site_name" content="J1NXEM&#39;s blog">
+<meta property="og:description" content="DASCTF2025下半年比赛逆向题。前一阵子一直在复习备考，没及时更新~~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131527571.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131951699.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131956163.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131621288.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132011160.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132013634.png">
+<meta property="og:image" content="c:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20251213202653025.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132035462.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132040605.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132044646.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132055016.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132055513.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132102561.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132116464.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132117426.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132119531.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132121397.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132137426.png">
+<meta property="article:published_time" content="2025-12-13T07:17:36.000Z">
+<meta property="article:modified_time" content="2025-12-13T13:53:17.683Z">
+<meta property="article:author" content="J1NXEM">
+<meta property="article:tag" content="ctf-reverse-wp">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131527571.png">
+<meta name="twitter:creator" content="@J1NXEM">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>DASCTF下半年赛_reverse - J1NXEM&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/links.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"j1nxem-o.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2025-04-25T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>J1NXEM’s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/wenzhang.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="DASCTF下半年赛_reverse"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        J1NXEM
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-13 15:17" pubdate>
+          2025年12月13日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          936 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          8 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">DASCTF下半年赛_reverse</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2025-12-13T21:53:17+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>DASCTF2025下半年比赛逆向题。前一阵子一直在复习备考，没及时更新~~</p>
+<span id="more"></span>
+
+<h1 id="androidfff"><a href="#androidfff" class="headerlink" title="androidfff"></a>androidfff</h1><p>先用jadx看，发现MainActivity是空的，然后看了下AndroidManifest发现是flutter，用blutter恢复。</p>
+<p>blutter安装教程：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hansa/p/18337467">https://www.cnblogs.com/hansa/p/18337467</a></p>
+<p>先用blutter解包得到符号表那些，ida打开libapp.so，导入符号表</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131527571.png" srcset="/img/loading.gif" lazyload alt="image-20251213152716446"></p>
+<p>直接搜索flag找到对应的函数，这里就是密文</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131951699.png" srcset="/img/loading.gif" lazyload alt="image-20251213195155622"></p>
+<p>不过找到主要加密逻辑还是有点麻烦，这里我看了其他师傅的解题过程</p>
+<p>通过解包出来的pp.txt找到逻辑，地址就是0x29cb18</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131956163.png" srcset="/img/loading.gif" lazyload alt="image-20251213195611107"></p>
+<p>这里是xor加密的逻辑，先<em>2，</em>2相当于左移1位，解密就是右移移1位，再xor0x32，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512131621288.png" srcset="/img/loading.gif" lazyload alt="image-20251213162140217"></p>
+<p>解密脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python">cipher = [<span class="hljs-number">0xEC</span>,<span class="hljs-number">0xE6</span>,<span class="hljs-number">0xC2</span>,<span class="hljs-number">0xE2</span>,<span class="hljs-number">0xCC</span>,<span class="hljs-number">0xE8</span>,<span class="hljs-number">0x92</span>,<span class="hljs-number">0xA8</span>,<span class="hljs-number">0xBC</span>,<span class="hljs-number">0x8E</span>,<span class="hljs-number">0x8C</span>,<span class="hljs-number">0x8C</span>,<span class="hljs-number">0xAE</span>,<span class="hljs-number">0x80</span>,<span class="hljs-number">0xDA</span>,<span class="hljs-number">0xB6</span>,<span class="hljs-number">0x82</span>,<span class="hljs-number">0xDA</span>,<span class="hljs-number">0x82</span>,<span class="hljs-number">0xBA</span>,<span class="hljs-number">0xDA</span>,<span class="hljs-number">0xAE</span>,<span class="hljs-number">0xA6</span>,<span class="hljs-number">0x82</span>,<span class="hljs-number">0x96</span>,<span class="hljs-number">0x9E</span>]<br><br>plain = []<br><span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> cipher:<br>    <span class="hljs-keyword">if</span> c &amp; <span class="hljs-number">1</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Error: odd byte!&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        p = (c &gt;&gt; <span class="hljs-number">1</span>) ^ <span class="hljs-number">0x32</span><br>        plain.append(p)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;Decrypted:&quot;</span>, <span class="hljs-built_in">bytes</span>(plain))<br></code></pre></td></tr></table></figure>
+
+<p>&#x2F;&#x2F;DASCTF{flutter_is_so_easy}</p>
+<h1 id="ezmac"><a href="#ezmac" class="headerlink" title="ezmac"></a>ezmac</h1><p>这里找到验证的部分，输出right&#x2F;wrong</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132011160.png" srcset="/img/loading.gif" lazyload alt="image-20251213201114111"></p>
+<p>然后看看上级的调用，看汇编，这里其实是传参的过程，传参是0x57，其实就是xor加密的密钥</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132013634.png" srcset="/img/loading.gif" lazyload alt="image-20251213201346577"></p>
+<p>byte_100004022就是密文内容</p>
+<p>这里就是xor加密部分</p>
+<p><img src="C:/Users/38489/AppData/Roaming/Typora/typora-user-images/image-20251213202653025.png" srcset="/img/loading.gif" lazyload alt="image-20251213202653025"></p>
+<p>解密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">data = [<span class="hljs-number">0x7D</span>, <span class="hljs-number">0x7B</span>, <span class="hljs-number">0x68</span>, <span class="hljs-number">0x7F</span>, <span class="hljs-number">0x69</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x44</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x72</span>, <span class="hljs-number">0x21</span>,<br><span class="hljs-number">0x74</span>, <span class="hljs-number">0x76</span>, <span class="hljs-number">0x75</span>, <span class="hljs-number">0x22</span>, <span class="hljs-number">0x26</span>, <span class="hljs-number">0x7B</span>, <span class="hljs-number">0x7C</span>, <span class="hljs-number">0x7E</span>, <span class="hljs-number">0x78</span>, <span class="hljs-number">0x7A</span>, <span class="hljs-number">0x2E</span>, <span class="hljs-number">0x2D</span>,<br><span class="hljs-number">0x7F</span>, <span class="hljs-number">0x2D</span>]<br>res = []<br><span class="hljs-keyword">for</span> i,b <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(data):<br>    key = <span class="hljs-number">57</span> + i<br>    orig = b ^ key<br>    res.append(orig)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#x27;</span>.join(<span class="hljs-built_in">chr</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> res))<br>//DASCTF&#123;83c720da35436cc0&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="androidfile"><a href="#androidfile" class="headerlink" title="androidfile"></a>androidfile</h1><p>直接看mainactivity，发现所有的明文内容都被加密了，不过影响不大</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132035462.png" srcset="/img/loading.gif" lazyload alt="image-20251213203525406"></p>
+<p>加密过程：先将flag进行AES-CBC加密，不过key和iv都是伪随机的，再进行base64加密，然后是RSA公钥加密，再base64加密，最后是在native层的校验。</p>
+<p>解密就清晰了，先看so文件，native层的加密就是rc4+base64，rc4加密密钥就是REVERSE</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132040605.png" srcset="/img/loading.gif" lazyload alt="image-20251213204054520"></p>
+<p>题目给的密文等信息</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs awk">EvB2udc3ofALSbCxeH5j4O2QZjfyZ151Nj3tOBVpt+<span class="hljs-number">99</span>XXudbbzYknID0CxFcVO5+Vf16SjxzVbCuOizTIm3TVXXprsM1IlyjzJnTIUc8s4cFIX+clb1zN5PqUm11Z9LDlUMGYu+fa0fZqB5o7EMXWJvl+uKOsk<span class="hljs-regexp">/K3zzrnU0Rdpn/</span>Ylm0ZBBDqpaNDYeXkGM52Uj6NxOhRRMaW2VcH<span class="hljs-regexp">/u4rNg7y7/</span>X6OKa68G2TstGohwelnKpzgp4eFBNxn2<br>&lt;-encryptinput-&gt;<br>UBUSWb+<span class="hljs-number">1</span>P3Z<span class="hljs-regexp">/aokV67e5xQ7eaHoEj3JAeC0XA1RckTWdWZYCB/</span>+D7qC3Hao74goX<br><br><br><br>获取的RSA公钥和私钥<br>-----<span class="hljs-keyword">BEGIN</span> PUBLIC KEY-----  <br>MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ3AfAR+HoKn8iQaFT8xjSLkJf+uHuX5  dSH<span class="hljs-regexp">/gsLSAlqIkVeADHx7okRAfl5U2sCe0A/</span><span class="hljs-number">2</span>SY9sDurGOLHTYcmHAuECAwEAAQ\=\=  <br>-----<span class="hljs-keyword">END</span> PUBLIC KEY-----<br><br>-----<span class="hljs-keyword">BEGIN</span> PRIVATE KEY-----  <br>MIIBVQIBADANBgkqhkiG9w0BAQEFAASCAT8wggE7AgEAAkEAncB8BH4egqfyJBoVPzGNIuQl<span class="hljs-regexp">/64e5fl1If+CwtICWoiRV4AMfHuiREB+XlTawJ7QD/</span>ZJj2wO6sY4sdNh  yYcC4QIDAQABAkEAh81Gdg+kcFHoD9AsbkRX<span class="hljs-regexp">/atuUtcwXkYL4gK2LMThpdEFHIO7  Scr+SYfwqmm/</span>LMtkbojEGEnNoIfmoLvGfhXaAQIhANDWo8OSMSQFnvh129cFiVfY  KlS4ec24ixvFD8fUD4SRAiEAwWBuZ3kox1n21AsTAxom+E3z5KUUOSUjPXvG6tZB  gVECIDOP2y0tSi6<span class="hljs-regexp">/qIll6BqFxmxG9eSnC4PMfaQkmonXBOHRAiBmJUPsUGmj8/</span>eX  xknCp7vSCYs9SZ3HGcDlp05Jmed8IQIhAJnE1PNe9lC5OazgRYhSG6bGCTbfFHT6  OuwCVIxRSx4P  <br>-----<span class="hljs-keyword">END</span> PRIVATE KEY-----<br></code></pre></td></tr></table></figure>
+
+<p>提取第一段密文进行解密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132044646.png" srcset="/img/loading.gif" lazyload alt="image-20251213204454580"></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk">enkey_QMz2qirA80LJiOs30Efl00JsrIv+ZdrM9iB74P<span class="hljs-regexp">/nCWOrzEemEOaq2lN1/</span>V5<span class="hljs-regexp">/rOAoTgBanJO/</span>Acpo<br>okhVIOVdsA==<br>eniv_hKH<span class="hljs-regexp">/M/</span>v8zwVICeWlc652BZk2eA<span class="hljs-regexp">/c2g0cLpBwvWBVlphiwBBasdn9HPWk7sb/</span>IaRh8eppZrToUwz6<br>f1eomFJkEQ=<br></code></pre></td></tr></table></figure>
+
+<p>这是解出来的key和iv，下一步就是利用rsa来解密key和iv了，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132055016.png" srcset="/img/loading.gif" lazyload alt="image-20251213205459950"></p>
+<p>key：ElmGJYfKbc2gJh0G</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132055513.png" srcset="/img/loading.gif" lazyload alt="image-20251213205543463"></p>
+<p>iv：JZ4tQgwSm3ZZIELJ</p>
+<p>最后就是aes解密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132102561.png" srcset="/img/loading.gif" lazyload alt="image-20251213210218499"></p>
+<p>DASCTF{android_encrypto_file_and_plains}</p>
+<h1 id="login"><a href="#login" class="headerlink" title="login"></a>login</h1><p>在server端，这里是接收了一个account然后进行验证，byte_C1A0是对比的密文，属于rsa密文</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132116464.png" srcset="/img/loading.gif" lazyload alt="image-20251213211625403"></p>
+<p>还有一个rc4加密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132117426.png" srcset="/img/loading.gif" lazyload alt="image-20251213211758378"></p>
+<p>sub_73B2使用rsa私钥解密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132119531.png" srcset="/img/loading.gif" lazyload alt="image-20251213211951486"></p>
+<p>在client端中获取RSA因⼦(P,Q)重建私钥解密byte_C1A0和byte_C0A，解密得到key和iv</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132121397.png" srcset="/img/loading.gif" lazyload alt="image-20251213212157339"></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs"><br></code></pre></td></tr></table></figure>
+
+<p>sub_49DD 和 sub_4125 函数都是AES-CBC加密</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202512132137426.png" srcset="/img/loading.gif" lazyload alt="image-20251213213757369"></p>
+<p>解密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.PublicKey <span class="hljs-keyword">import</span> RSA<br><span class="hljs-keyword">from</span> Crypto.Cipher <span class="hljs-keyword">import</span> PKCS1_OAEP<br><span class="hljs-keyword">import</span> binascii<br><br><span class="hljs-comment"># RSA Parameters (Hex strings from analysis)</span><br>n_hex = (<br>    <span class="hljs-string">&quot;9a49428cadd84b7a81cb80f916e645a6a9dd23c2fe679f93af6a77eff0f0bb13&quot;</span><br>    <span class="hljs-string">&quot;09b77fb7861275f07ab41e98ae5c2ecf933f27d47b9ce0a55a3e06569cacbb4&quot;</span><br>    <span class="hljs-string">&quot;c9183f8ee9a47f2cfbb3a5965c9326f45d2d608cfeabea1a1879eae95b70224&quot;</span><br>    <span class="hljs-string">&quot;d2e7736b9bc4109756f55a3f70f11a9b9c6564fb6456d329c336fbb59859db5&quot;</span><br>    <span class="hljs-string">&quot;fde1f2338294e863c4f05b4a89e6c3b761d52a2081a0af0a320fde831daa74&quot;</span><br>    <span class="hljs-string">&quot;1fad77aa7ef2dd30b3e33d1a6e7b44ed44ef40de4557a4fd65b63db63d105386bb&quot;</span><br>    <span class="hljs-string">&quot;d81071739ec3d0fe44b6a0952a2b065bededfecea6e22229fea32adfc9a6e2cc&quot;</span><br>    <span class="hljs-string">&quot;fdf5da437a56ad41d7ef08c2c4635d3a0218aab2a5ed6e9dd42d684bc918efe24d3&quot;</span><br>)<br><br>e_hex = <span class="hljs-string">&quot;10001&quot;</span><br><br>d_hex = (<br>    <span class="hljs-string">&quot;28c7df24a5798679db2a44979275f5f3179db180d91335702942fb1b70e985de&quot;</span><br>    <span class="hljs-string">&quot;825da90f2eb65d20ddf8be1d9d4e15bc1d84e95795ff8c0c28ce3c33fde054f6&quot;</span><br>    <span class="hljs-string">&quot;e82a4f4cc22597b350c9c62ccc0188bd4152a701a3601558f22aa9fae8b9fdac&quot;</span><br>    <span class="hljs-string">&quot;6c2bc09b1637f71e0511805e04b203c4fdb2b36ad232fe819b06ed4e57c74f39&quot;</span><br>    <span class="hljs-string">&quot;fd9b72623c16ff2100f148f622bf12876260c4859672360dc0da3da6b45c5c8c&quot;</span><br>    <span class="hljs-string">&quot;6215ccda072765840c213fba11a91d6bf598a8a8065797566c8950a34ea0a072&quot;</span><br>    <span class="hljs-string">&quot;a9ed0c38bdc58662f186ec578ca55d5098443fd566cc722ace9c4e89afc4e302&quot;</span><br>    <span class="hljs-string">&quot;c8a4870e11a003b935f4a102695bfd64bb0fa74dcc372682e2b24ff45a1a69&quot;</span><br>)<br><br>c_account_hex = (<br>    <span class="hljs-string">&quot;1638e0eb936140b5527033292cbefcd73b55cfc7fb79df51ae3768a0dd9c84ae&quot;</span><br>    <span class="hljs-string">&quot;4580e47a5133b425f4c93eac97e4b1aa0b4cd30589d004f6d0d19fcbc709e86c&quot;</span><br>    <span class="hljs-string">&quot;c2996b433d29f650b69987a466f05bef7f69945860dcc44742a511f3621385c8&quot;</span><br>    <span class="hljs-string">&quot;9fbd4d73153615789634b25cfc3151a4115bc30c96979e5f965290f36a863e33&quot;</span><br>    <span class="hljs-string">&quot;78b5cfc9ba31438c4bae22b23ef815edf7cf1771803bd392a5072b468900b75f&quot;</span><br>    <span class="hljs-string">&quot;5a4377d1daf3d6f7b7b6850d1a4a4134f2f65840efaa9b83d31083051df0fc80&quot;</span><br>    <span class="hljs-string">&quot;a786529159484f62bbb9524f68285f48c7ab8e03bdfeca1a6025aaed9f9728b3&quot;</span><br>    <span class="hljs-string">&quot;90689c0c963920c728eb5695fcb9413f9f4e06d3b93db40e26d6275c84e6126a&quot;</span><br>)<br><br>c_key_hex = (<br>    <span class="hljs-string">&quot;373a2a27b38fd778c716728ebb95be89a0a057109119a08d5ce49261ebb0e077&quot;</span><br>    <span class="hljs-string">&quot;6d254a40c4d21bd2463e61608771de401eed13ac6660d996bea8c8b82bdd0eaf&quot;</span><br>    <span class="hljs-string">&quot;56c38466776eba31f7b2219230b654a77ec0af395a01c31c139a4f6b7b8ba845&quot;</span><br>    <span class="hljs-string">&quot;192096165dd7acd0331e79dbe434ed8c9a66581d26f69e5faa295f66010076b9&quot;</span><br>    <span class="hljs-string">&quot;1a6dd61db7abd325f8bd25d928debcc02e5555ff81f7ae3e548e3e4659a37f5d&quot;</span><br>    <span class="hljs-string">&quot;3d3c39fbcad1b583e42fb04fa328ebb77e7841f45b711e77ee23e11989db2c0e&quot;</span><br>    <span class="hljs-string">&quot;06b8191a456d56bd1a7d42c47fdfdf1179228b57c6efca9b9b6a7d22682e5b67&quot;</span><br>    <span class="hljs-string">&quot;c7c46a877fb677f5f317b4823fcdc812f0362be27c0f5453037148ed30127b26&quot;</span><br>)<br><br>c_account = binascii.unhexlify(c_account_hex[:<span class="hljs-number">512</span>])<br>c_key = binascii.unhexlify(c_key_hex[:<span class="hljs-number">512</span>])<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;N length: <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(binascii.unhexlify(n_hex))&#125;</span>&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Account length: <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(c_account)&#125;</span>&quot;</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Key length: <span class="hljs-subst">&#123;<span class="hljs-built_in">len</span>(c_key)&#125;</span>&quot;</span>)<br><br>n = <span class="hljs-built_in">int</span>(n_hex, <span class="hljs-number">16</span>)<br>e = <span class="hljs-built_in">int</span>(e_hex, <span class="hljs-number">16</span>)<br>d = <span class="hljs-built_in">int</span>(d_hex, <span class="hljs-number">16</span>)<br><br>key = RSA.construct((n, e, d))<br>cipher = PKCS1_OAEP.new(key)<br><br><span class="hljs-keyword">try</span>:<br>    m_account = cipher.decrypt(c_account)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Account: <span class="hljs-subst">&#123;m_account&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Account Decrypt Error: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br><br><span class="hljs-keyword">try</span>:<br>    m_key = cipher.decrypt(c_key)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Key: <span class="hljs-subst">&#123;m_key&#125;</span>&quot;</span>)<br><span class="hljs-keyword">except</span> Exception <span class="hljs-keyword">as</span> e:<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">f&quot;Key Decrypt Error: <span class="hljs-subst">&#123;e&#125;</span>&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<p>iv: aassddffgghhjjll<br>Key: qqwweerrttyyuuii</p>
+<p>aes解密</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> Crypto.Cipher <span class="hljs-keyword">import</span> AES<br>key = <span class="hljs-string">b&#x27;qqwweerrttyyuuii&#x27;</span><br>iv = <span class="hljs-string">b&#x27;aassddffgghhjjll&#x27;</span><br>enc = <span class="hljs-built_in">bytes</span>([<br><span class="hljs-number">0xAD</span>, <span class="hljs-number">0xD1</span>, <span class="hljs-number">0xD1</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0x60</span>, <span class="hljs-number">0xC2</span>, <span class="hljs-number">0x2D</span>, <span class="hljs-number">0x91</span>, <span class="hljs-number">0x66</span>, <span class="hljs-number">0xDA</span>,<br><span class="hljs-number">0xC3</span>, <span class="hljs-number">0xC2</span>, <span class="hljs-number">0x67</span>, <span class="hljs-number">0x25</span>, <span class="hljs-number">0xC8</span>, <span class="hljs-number">0x19</span>, <span class="hljs-number">0x09</span>, <span class="hljs-number">0x17</span>, <span class="hljs-number">0x6B</span>, <span class="hljs-number">0x23</span>,<br><span class="hljs-number">0x8E</span>, <span class="hljs-number">0x30</span>, <span class="hljs-number">0x03</span>, <span class="hljs-number">0xAA</span>, <span class="hljs-number">0x57</span>, <span class="hljs-number">0xAA</span>, <span class="hljs-number">0xCB</span>, <span class="hljs-number">0xA0</span>, <span class="hljs-number">0xA2</span>, <span class="hljs-number">0x26</span>,<br><span class="hljs-number">0xB7</span>, <span class="hljs-number">0xC3</span>, <span class="hljs-number">0x1C</span>, <span class="hljs-number">0x22</span>, <span class="hljs-number">0x0B</span>, <span class="hljs-number">0x8D</span>, <span class="hljs-number">0x20</span>, <span class="hljs-number">0x9C</span>, <span class="hljs-number">0xB4</span>, <span class="hljs-number">0x95</span>,<br><span class="hljs-number">0xB5</span>, <span class="hljs-number">0x5D</span>, <span class="hljs-number">0xB4</span>, <span class="hljs-number">0xE2</span>, <span class="hljs-number">0x7D</span>, <span class="hljs-number">0x4E</span>, <span class="hljs-number">0x43</span>, <span class="hljs-number">0x8E</span><br>])<br>cipher = AES.new(key, AES.MODE_CBC, iv)<br>decrypted = cipher.decrypt(enc)<br><span class="hljs-built_in">print</span>(decrypted.decode(<span class="hljs-string">&#x27;utf-8&#x27;</span>, errors=<span class="hljs-string">&#x27;ignore&#x27;</span>))<br>//DASCTF&#123;dqmaxfwkm921kr21m;df1m1dqmlk1d12d1&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/reverse%E6%AF%94%E8%B5%9B%E5%A4%8D%E7%8E%B0/" class="category-chain-item">reverse比赛复现</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ctf-reverse-wp/" class="print-no-link">#ctf-reverse-wp</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DASCTF下半年赛_reverse</div>
+      <div>https://j1nxem-o.github.io/2025/12/13/DASCTF下半年赛-reverse/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>J1NXEM</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年12月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/11/12/%E5%9F%BA%E4%BA%8Epintool%E7%9A%84%E4%BE%A7%E4%BF%A1%E9%81%93%E7%88%86%E7%A0%B4%E5%AE%9E%E7%8E%B0/" title="基于pintool的侧信道爆破实现">
+                        <span class="hidden-mobile">基于pintool的侧信道爆破实现</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"https://imagegoo-twikoo.hf.space","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <div>
+  <span id="timeDate">正在载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("01/09/2025 00:00:00");
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀已持续航行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>
