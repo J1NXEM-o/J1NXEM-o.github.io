@@ -1,0 +1,901 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/tubiao.png">
+  <link rel="icon" href="/img/tubiao.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#4F4F4F">
+  <meta name="author" content="J1NXEM">
+  <meta name="keywords" content="zh-CN">
+  
+    <meta name="description" content="​    昨天已经学习了Android的基础结构，今天学习一下安卓的底层开发基础，主要是JNI的学习，顺便找了相应的题学习加深一下学习印象。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android基础机制与调用流程解析">
+<meta property="og:url" content="https://j1nxem-o.github.io/2026/04/13/Android-%E5%9F%BA%E7%A1%80%E6%9C%BA%E5%88%B6%E4%B8%8E%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="J1NXEM&#39;s blog">
+<meta property="og:description" content="​    昨天已经学习了Android的基础结构，今天学习一下安卓的底层开发基础，主要是JNI的学习，顺便找了相应的题学习加深一下学习印象。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604131950751.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604132047694.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604132047499.png">
+<meta property="article:published_time" content="2026-04-13T11:21:28.000Z">
+<meta property="article:modified_time" content="2026-04-13T12:51:19.100Z">
+<meta property="article:author" content="J1NXEM">
+<meta property="article:tag" content="Android底层开发基础">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604131950751.png">
+<meta name="twitter:creator" content="@J1NXEM">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Android基础机制与调用流程解析 - J1NXEM&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/links.css">
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/glassBg.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"j1nxem-o.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2025-04-25T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body><!-- hexo injector body_begin start --><div id="web_bg"></div><!-- hexo injector body_begin end -->
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>J1NXEM’s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/wenzhang.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Android基础机制与调用流程解析"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        J1NXEM
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-04-13 19:21" pubdate>
+          2026年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          15 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Android基础机制与调用流程解析</h1>
+            
+              <p id="updated-time" class="note note-info" style="display: none">
+                
+                  
+                    本文最后更新于 2026-04-13T20:51:19+08:00
+                  
+                  
+
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <p>​    昨天已经学习了Android的基础结构，今天学习一下安卓的底层开发基础，主要是JNI的学习，顺便找了相应的题学习加深一下学习印象。</p>
+<span id="more"></span>
+
+<h1 id="SDK、NDK、JNI-与SO-ELF-的关系解析"><a href="#SDK、NDK、JNI-与SO-ELF-的关系解析" class="headerlink" title="SDK、NDK、JNI 与SO&#x2F;ELF 的关系解析"></a>SDK、NDK、JNI 与SO&#x2F;ELF 的关系解析</h1><p><strong><code>SDK</code><strong>是 Android <strong>应用</strong>开发工具包，主要用</strong>于 Java&#x2F;Kotlin 层开发</strong>，提供 UI、组件（Activity、Service 等）及系统 API 支持。</p>
+<p><strong><code>NDK</code><strong>是 Android 原生开发工具包，</strong>用于使用 C&#x2F;C++ 编写底层代码，并编译生成 .so 本地库。</strong></p>
+<p><strong><code>JNI</code><strong>是 Java 与 C&#x2F;C++ 之间的调用桥梁，负责</strong>实现 Java 层与 Native 层之间的函数调用与数据交互</strong>。</p>
+<p><strong><code>.so</code><strong>是 Android 中的本地动态链接库，</strong>由 NDK 编译生成</strong>，在运行时被加载执行。</p>
+<p>**<code>ELF</code>**是 Linux 系统下的可执行文件格式，.so 文件本质上就是 ELF 文件的一种形式。</p>
+<figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c#">SDK 写 Java 层逻辑<br>↓<br>JNI 负责调用<br>↓<br>NDK 编译 C/C++<br>↓<br>生成 .so<br>↓<br>.so 本质是 ELF 文件并在系统中执行<br></code></pre></td></tr></table></figure>
+
+<p>SDK 负责应用层开发，JNI 作为桥梁连接 Java 与 Native，NDK 负责构建 Native 代码，而生成的 .so 文件本质上是 ELF 格式，最终在 Android 系统中被加载执行。</p>
+<hr>
+<h1 id="JNI基础学习"><a href="#JNI基础学习" class="headerlink" title="JNI基础学习"></a>JNI基础学习</h1><h2 id="1-JNI-开发的基本流程"><a href="#1-JNI-开发的基本流程" class="headerlink" title="1 .JNI 开发的基本流程"></a>1 .<strong>JNI 开发的基本流程</strong></h2><p>一个标准的 JNI 开发流程通常包括以下步骤：</p>
+<ol>
+<li><p>编写 Java 类并声明 native 方法，作为 Java 调用本地代码的入口；</p>
+</li>
+<li><p>编译 Java 源文件，并使用 <code>javac -h</code> 生成对应的 JNI 头文件（.h），其中定义了本地方法的函数原型；</p>
+</li>
+<li><p>在 C&#x2F;C++ 源文件中实现头文件中声明的函数逻辑；</p>
+</li>
+<li><p>使用编译工具将本地代码编译为动态库文件（.so）；</p>
+</li>
+<li><p>在 Java 程序中通过 <code>System.loadLibrary(...)</code> 加载该动态库；</p>
+</li>
+<li><p>运行程序，完成 Java 层与本地 C&#x2F;C++ 层之间的调用与数据交互。</p>
+</li>
+</ol>
+<p>该流程用示意图表示如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604131950751.png" srcset="/img/loading.gif" lazyload alt="image-20260413195038636"></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">JNI </span>开发流程本质就是：声明 → 生成接口 → 实现 → 编译 → 加载 → 调用<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-注册-JNI-函数"><a href="#2-注册-JNI-函数" class="headerlink" title="2.注册 JNI 函数"></a>2.<strong>注册 JNI 函数</strong></h2><h3 id="2-1静态注册"><a href="#2-1静态注册" class="headerlink" title="2.1静态注册"></a>2.1静态注册</h3><p>静态注册采用的是按照固定的命名规则，通过 <code>javah</code> 可以自动生成 native 方法对应的函数声明。例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">Java_com_swdd_summertrain_MainActivity_Check<br></code></pre></td></tr></table></figure>
+
+<p>不过，静态注册的命名规则分为无重载和有重载2 种情况：无重载时采用短名称规则，有重载时采用长名称规则。</p>
+<p>可以通过这个文章进行学习：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIyNTI1ODMwOQ==&mid=2247484917&idx=1&sn=ad718aaa5bd22ac39b9b8dac413fac42&scene=21&poc_token=HAfZ3Gmj8GeqxllC__qKLFbf3-34_3CUz2Cs9Xt3">NDK 系列（6）：说一下注册 JNI 函数的方式和时机</a></p>
+<h3 id="2-2动态注册"><a href="#2-2动态注册" class="headerlink" title="2.2动态注册"></a>2.2动态注册</h3><p>动态注册需要提前手动建立映射关系，不用遵守静态注册的 JNI 函数命名规则。</p>
+<p>动态注册需要使用 <code>RegisterNatives(...)</code> 函数，其定义在 <code>jni.h</code> 文件中：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">JNINativeInterface</span> &#123;</span><br>  jint        (*RegisterNatives)(JNIEnv*, jclass, <span class="hljs-type">const</span> JNINativeMethod*, jint);<br>    jint        (*UnregisterNatives)(JNIEnv*, jclass);<br>&#125;;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name;      <span class="hljs-comment">// Java 方法名</span><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* signature; <span class="hljs-comment">// Java 方法描述符</span><br>    <span class="hljs-type">void</span>*       fnPtr;     <span class="hljs-comment">// JNI 函数指针</span><br>&#125; JNINativeMethod;<br></code></pre></td></tr></table></figure>
+
+<p><code>JNINativeInterface</code> &#x3D; JNI 函数表（函数指针表）</p>
+<p><code>RegisterNatives</code> 函数是最终的注册函数，需要传递 jclass、JNINativeMethod 结构体数组和数组长度。</p>
+<p><code>RegisterNatives</code> 方式的本质是直接通过结构体指定映射关系，而不是等到调用 native 方法时搜索 JNI 函数指针。</p>
+<p>此外，还能减少生成 so 库文件中导出符号的数量，增加进一步逆向的难度。</p>
+<h2 id="3-加载so库"><a href="#3-加载so库" class="headerlink" title="3.加载so库"></a>3.加载so库</h2><p>整个流程：</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs pf">System.<span class="hljs-built_in">load</span> / <span class="hljs-built_in">load</span>Library<br>        ↓<br>Runtime.load0 / <span class="hljs-built_in">load</span>Library0<br>        ↓<br>找到 so 的绝对路径<br>        ↓<br>nativeLoad<br>        ↓<br>dlopen 加载 so<br>        ↓<br>执行 JNI_OnLoad<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-1-System-load-方法"><a href="#3-1-System-load-方法" class="headerlink" title="3.1 System.load()方法"></a>3.1 System.load()方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">System.load(<span class="hljs-string">&quot;/data/app/libxxx.so&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>特点是必须是绝对路径，不做任何查找。</p>
+<h3 id="3-2-System-loadLibrary-方法"><a href="#3-2-System-loadLibrary-方法" class="headerlink" title="3.2 System.loadLibrary()方法"></a><strong>3.2 System.loadLibrary()方法</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">System.loadLibrary(<span class="hljs-string">&quot;native-lib&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>特点是传的是库名，自动补全。</p>
+<p>Android 加载 so 库的本质流程是：通过 System.load 或 loadLibrary 获取库路径，再由 nativeLoad 调用 dlopen 加载到内存，并执行 JNI_OnLoad 完成初始化。</p>
+<hr>
+<p>上面的内容比较基础，还没涉及到真正的JNI开发，后续会持续更新。</p>
+<hr>
+<p>下面的内容是找的相应的题目练习，题目来源于swdd~</p>
+<h2 id="1、静态注册"><a href="#1、静态注册" class="headerlink" title="1、静态注册"></a>1、静态注册</h2><p>关键函数，程序加载native库，看主函数确定主要逻辑在native层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> Boolean <span class="hljs-title function_">Check</span><span class="hljs-params">(String str)</span>;<br><br><span class="hljs-keyword">static</span> &#123;<br>    System.loadLibrary(<span class="hljs-string">&quot;summertrain&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>so文件主函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><code class="hljs c">__int64 __fastcall <span class="hljs-title function_">Java_com_swdd_summertrain_MainActivity_Check</span><span class="hljs-params">(__int64 a1, __int64 a2, __int64 a3)</span><br>&#123;<br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *s; <span class="hljs-comment">// x0</span><br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *s_1; <span class="hljs-comment">// x21</span><br>  <span class="hljs-type">size_t</span> n; <span class="hljs-comment">// x23</span><br>  <span class="hljs-type">int8x16_t</span> *s1; <span class="hljs-comment">// x0</span><br>  <span class="hljs-type">int8x16_t</span> *s1_1; <span class="hljs-comment">// x22</span><br>  <span class="hljs-type">bool</span> v10; <span class="hljs-comment">// cf</span><br>  <span class="hljs-type">unsigned</span> __int64 n_1; <span class="hljs-comment">// x8</span><br>  __int64 v12; <span class="hljs-comment">// x23</span><br>  <span class="hljs-type">size_t</span> v13; <span class="hljs-comment">// x9</span><br>  _BYTE *v14; <span class="hljs-comment">// x10</span><br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *v15; <span class="hljs-comment">// x8</span><br>  <span class="hljs-type">char</span> v16; <span class="hljs-comment">// t1</span><br>  _BOOL4 v17; <span class="hljs-comment">// w23</span><br>  __int64 v18; <span class="hljs-comment">// x24</span><br>  __int64 v19; <span class="hljs-comment">// x0</span><br>  <span class="hljs-type">int8x16_t</span> *v21; <span class="hljs-comment">// x9</span><br>  <span class="hljs-type">int8x16_t</span> v22; <span class="hljs-comment">// q0</span><br>  <span class="hljs-type">int8x16_t</span> *v23; <span class="hljs-comment">// x10</span><br>  <span class="hljs-type">unsigned</span> __int64 v24; <span class="hljs-comment">// x11</span><br>  <span class="hljs-type">int8x16_t</span> v25; <span class="hljs-comment">// q1</span><br>  <span class="hljs-type">int8x16_t</span> v26; <span class="hljs-comment">// q2</span><br>  <span class="hljs-type">unsigned</span> __int64 n_2; <span class="hljs-comment">// x11</span><br>  <span class="hljs-type">int8x8_t</span> *v28; <span class="hljs-comment">// x9</span><br>  <span class="hljs-type">int8x8_t</span> *v29; <span class="hljs-comment">// x10</span><br>  <span class="hljs-type">unsigned</span> __int64 v30; <span class="hljs-comment">// x11</span><br>  <span class="hljs-type">int8x8_t</span> v31; <span class="hljs-comment">// t1</span><br><br>  s = (*(*a1 + <span class="hljs-number">1352LL</span>))(a1, a3, <span class="hljs-number">0LL</span>);<br>  <span class="hljs-keyword">if</span> ( s )<br>  &#123;<br>    s_1 = s;<br>    n = <span class="hljs-built_in">strlen</span>(s);<br>    s1 = operator new[](n + <span class="hljs-number">1</span>);<br>    s1_1 = s1;<br>    <span class="hljs-keyword">if</span> ( !n )<br>    &#123;<br>LABEL_15:<br>      s1-&gt;n128_u8[n] = <span class="hljs-number">0</span>;<br>      v17 = <span class="hljs-built_in">memcmp</span>(s1, <span class="hljs-string">&quot;U_RTH&#125;\\Dlj\\Flx]\\Dl&#125;RGZEVlWJ]R^ZPlAVTZ@GARGZ\\]Ncovariant return thunk to &quot;</span>, n) == <span class="hljs-number">0</span>;<br>      v18 = (*(*a1 + <span class="hljs-number">48LL</span>))(a1, <span class="hljs-string">&quot;java/lang/Boolean&quot;</span>);<br>      v19 = (*(*a1 + <span class="hljs-number">264LL</span>))(a1, v18, <span class="hljs-string">&quot;&lt;init&gt;&quot;</span>, <span class="hljs-string">&quot;(Z)V&quot;</span>);<br>      v12 = _JNIEnv::NewObject(a1, v18, v19, v17);<br>      (*(*a1 + <span class="hljs-number">1360LL</span>))(a1, a3, s_1);<br>      operator delete[](s1_1);<br>      <span class="hljs-keyword">return</span> v12;<br>    &#125;<br>    <span class="hljs-keyword">if</span> ( n &lt; <span class="hljs-number">8</span> || (s1 &lt; &amp;s_1[n] ? (v10 = s_1 &gt;= s1 + n) : (v10 = <span class="hljs-number">1</span>), !v10) )<br>    &#123;<br>      n_1 = <span class="hljs-number">0LL</span>;<br>LABEL_13:<br>      v13 = n - n_1;<br>      v14 = s1 + n_1;<br>      v15 = &amp;s_1[n_1];<br>      <span class="hljs-keyword">do</span><br>      &#123;<br>        v16 = *v15++;<br>        --v13;<br>        *v14++ = v16 ^ <span class="hljs-number">0x33</span>;<br>      &#125;<br>      <span class="hljs-keyword">while</span> ( v13 );<br>      <span class="hljs-keyword">goto</span> LABEL_15;<br>    &#125;<br>    <span class="hljs-keyword">if</span> ( n &gt;= <span class="hljs-number">0x20</span> )<br>    &#123;<br>      n_1 = n &amp; <span class="hljs-number">0xFFFFFFFFFFFFFFE0L</span>L;<br>      v21 = (s_1 + <span class="hljs-number">16</span>);<br>      v22.n128_u64[<span class="hljs-number">0</span>] = <span class="hljs-number">0x3333333333333333L</span>L;<br>      v22.n128_u64[<span class="hljs-number">1</span>] = <span class="hljs-number">0x3333333333333333L</span>L;<br>      v23 = s1 + <span class="hljs-number">1</span>;<br>      v24 = n &amp; <span class="hljs-number">0xFFFFFFFFFFFFFFE0L</span>L;<br>      <span class="hljs-keyword">do</span><br>      &#123;<br>        v25 = v21[<span class="hljs-number">-1</span>];<br>        v26 = *v21;<br>        v21 += <span class="hljs-number">2</span>;<br>        v24 -= <span class="hljs-number">32LL</span>;<br>        v23[<span class="hljs-number">-1</span>] = veorq_s8(v25, v22);<br>        *v23 = veorq_s8(v26, v22);<br>        v23 += <span class="hljs-number">2</span>;<br>      &#125;<br>      <span class="hljs-keyword">while</span> ( v24 );<br>      <span class="hljs-keyword">if</span> ( n == n_1 )<br>        <span class="hljs-keyword">goto</span> LABEL_15;<br>      <span class="hljs-keyword">if</span> ( (n &amp; <span class="hljs-number">0x18</span>) == <span class="hljs-number">0</span> )<br>        <span class="hljs-keyword">goto</span> LABEL_13;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>      n_1 = <span class="hljs-number">0LL</span>;<br>    &#125;<br>    n_2 = n_1;<br>    n_1 = n &amp; <span class="hljs-number">0xFFFFFFFFFFFFFFF8L</span>L;<br>    v28 = &amp;s_1[n_2];<br>    v29 = (s1 + n_2);<br>    v30 = n_2 - (n &amp; <span class="hljs-number">0xFFFFFFFFFFFFFFF8L</span>L);<br>    <span class="hljs-keyword">do</span><br>    &#123;<br>      v31.n64_u64[<span class="hljs-number">0</span>] = v28-&gt;n64_u64[<span class="hljs-number">0</span>];<br>      ++v28;<br>      v30 += <span class="hljs-number">8LL</span>;<br>      v29-&gt;n64_u64[<span class="hljs-number">0</span>] = veor_s8(v31, <span class="hljs-number">0x3333333333333333L</span>L).n64_u64[<span class="hljs-number">0</span>];<br>      ++v29;<br>    &#125;<br>    <span class="hljs-keyword">while</span> ( v30 );<br>    <span class="hljs-keyword">if</span> ( n == n_1 )<br>      <span class="hljs-keyword">goto</span> LABEL_15;<br>    <span class="hljs-keyword">goto</span> LABEL_13;<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0LL</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>就是一个xor0x33的简单逻辑</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">target = <span class="hljs-string">r&quot;U_RTH&#125;\Dlj\Flx]\Dl&#125;RGZEVlWJ]R^ZPlAVTZ@GARGZ\]N&quot;</span><br><br>flag = <span class="hljs-string">&quot;&quot;</span>.join(<span class="hljs-built_in">chr</span>(<span class="hljs-built_in">ord</span>(c) ^ <span class="hljs-number">0x33</span>) <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> target)<br><br><span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;flag:&quot;</span>, flag)<br>//flag&#123;Now_You_Know_Native_dynamic_registration&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2、动态注册"><a href="#2、动态注册" class="headerlink" title="2、动态注册"></a>2、动态注册</h2><p>和上述流程一样，不过在查找主函数时需要注意这个题目是动态注册，包名已经不按规定了，看JNI_OnLoad函数里调用check最终调用主函数<img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604132047694.png" srcset="/img/loading.gif" lazyload alt="image-20260316202813082"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/J1NXEM-o/blog-image@main/image/202604132047499.png" srcset="/img/loading.gif" lazyload alt="image-20260316203307320"></p>
+<p>主函数就是简单的移位</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">s2 = [<br><span class="hljs-number">0x99</span>,<span class="hljs-number">0x93</span>,<span class="hljs-number">0x9E</span>,<span class="hljs-number">0x98</span>,<span class="hljs-number">0x84</span>,<span class="hljs-number">0xB1</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x88</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0xA6</span>,<span class="hljs-number">0x90</span>,<span class="hljs-number">0x8A</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0xB4</span>,<span class="hljs-number">0x91</span>,<span class="hljs-number">0x90</span>,<br><span class="hljs-number">0x88</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0xB1</span>,<span class="hljs-number">0x9E</span>,<span class="hljs-number">0x8B</span>,<span class="hljs-number">0x96</span>,<span class="hljs-number">0x89</span>,<span class="hljs-number">0x9A</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0x8D</span>,<span class="hljs-number">0x9A</span>,<span class="hljs-number">0x9E</span>,<span class="hljs-number">0x93</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0x9B</span>,<span class="hljs-number">0x86</span>,<br><span class="hljs-number">0x91</span>,<span class="hljs-number">0x9E</span>,<span class="hljs-number">0x92</span>,<span class="hljs-number">0x96</span>,<span class="hljs-number">0x9C</span>,<span class="hljs-number">0xA0</span>,<span class="hljs-number">0x8D</span>,<span class="hljs-number">0x9A</span>,<span class="hljs-number">0x98</span>,<span class="hljs-number">0x96</span>,<span class="hljs-number">0x8C</span>,<span class="hljs-number">0x8B</span>,<span class="hljs-number">0x8D</span>,<span class="hljs-number">0x9E</span>,<span class="hljs-number">0x8B</span>,<span class="hljs-number">0x96</span>,<br><span class="hljs-number">0x90</span>,<span class="hljs-number">0x91</span>,<span class="hljs-number">0x82</span><br>]<br><br>flag = <span class="hljs-string">&#x27;&#x27;</span>.join(<span class="hljs-built_in">chr</span>((~b) &amp; <span class="hljs-number">0xff</span>) <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> s2)<br><br><span class="hljs-built_in">print</span>(flag)//flag&#123;Now_You_Know_Native_real_dynamic_registration&#125;<br></code></pre></td></tr></table></figure>
+
+<h1 id="静态注册vs动态注册"><a href="#静态注册vs动态注册" class="headerlink" title="静态注册vs动态注册"></a>静态注册vs动态注册</h1><h3 id="静态注册："><a href="#静态注册：" class="headerlink" title="静态注册："></a>静态注册：</h3><p>Java 直接声明 native 函数：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">native</span> Boolean <span class="hljs-title function_">Check</span><span class="hljs-params">(String str)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>JNI 会自动按照 固定命名规则去寻找 C 函数，函数名必须是：</p>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs haxe">Java_包名<span class="hljs-literal">_</span>类名<span class="hljs-literal">_</span>方法名<br></code></pre></td></tr></table></figure>
+
+<p>例如静态注册中的函数名：Java_com_swdd_summertrain_MainActivity_Check，很容易定位函数</p>
+<h3 id="动态注册："><a href="#动态注册：" class="headerlink" title="动态注册："></a>动态注册：</h3><p>在java中还是和静态注册时一样声明，但是 native函数名可以随便写，例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">jboolean <span class="hljs-title function_">sub_1544C</span><span class="hljs-params">(JNIEnv *env, jobject obj, jstring input)</span><br></code></pre></td></tr></table></figure>
+
+<p>然后在 JNI_OnLoad里手动绑定：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> JNINativeMethod methods[] = &#123;<br>    &#123;<span class="hljs-string">&quot;Check&quot;</span>, <span class="hljs-string">&quot;(Ljava/lang/String;)Z&quot;</span>, (<span class="hljs-type">void</span>*)sub_1544C&#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>注册：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">env-&gt;RegisterNatives(clazz, methods, <span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+
+<p>动态注册依赖一个结构体：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* name;        <span class="hljs-comment">// Java方法名</span><br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* signature;   <span class="hljs-comment">// 方法签名</span><br>    <span class="hljs-type">void</span>* fnPtr;             <span class="hljs-comment">// C函数地址</span><br>&#125; JNINativeMethod;<br></code></pre></td></tr></table></figure>
+
+<p>动态注册可以隐藏函数名，减少字符信息，可以添加混淆</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Android%E5%AD%A6%E4%B9%A0/" class="category-chain-item">Android学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Android%E5%BA%95%E5%B1%82%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80/" class="print-no-link">#Android底层开发基础</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Android基础机制与调用流程解析</div>
+      <div>https://j1nxem-o.github.io/2026/04/13/Android-基础机制与调用流程解析/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>J1NXEM</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年4月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年4月13日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/04/12/APK%E5%9F%BA%E7%A1%80%E7%BB%93%E6%9E%84%E8%A7%A3%E6%9E%90/" title="APK基础结构解析">
+                        <span class="hidden-mobile">APK基础结构解析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="twikoo"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#comments', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/twikoo/1.6.8/twikoo.all.min.js', function() {
+        var options = Object.assign(
+          {"envId":"https://imagegoo-twikoo.hf.space","region":"ap-shanghai","path":"window.location.pathname"},
+          {
+            el: '#twikoo',
+            path: 'window.location.pathname',
+            onCommentLoaded: function() {
+              Fluid.utils.listenDOMLoaded(function() {
+                var imgSelector = '#twikoo .tk-content img:not(.tk-owo-emotion)';
+                Fluid.plugins.imageCaption(imgSelector);
+                Fluid.plugins.fancyBox(imgSelector);
+              });
+            }
+          }
+        )
+        twikoo.init(options)
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  <div>
+  <span id="timeDate">正在载入天数...</span>
+  <span id="times">载入时分秒...</span>
+  <script>
+  var now = new Date();
+  function createtime(){
+      var grt= new Date("01/09/2025 00:00:00");
+      now.setTime(now.getTime()+250);
+      days = (now - grt ) / 1000 / 60 / 60 / 24;
+      dnum = Math.floor(days);
+      hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum);
+      hnum = Math.floor(hours);
+      if(String(hnum).length ==1 ){
+          hnum = "0" + hnum;
+      }
+      minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+      mnum = Math.floor(minutes);
+      if(String(mnum).length ==1 ){
+                mnum = "0" + mnum;
+      }
+      seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+      snum = Math.round(seconds);
+      if(String(snum).length ==1 ){
+                snum = "0" + snum;
+      }
+      document.getElementById("timeDate").innerHTML = "🚀已持续航行&nbsp"+dnum+"&nbsp天";
+      document.getElementById("times").innerHTML = hnum + "&nbsp时&nbsp" + mnum + "&nbsp分&nbsp" + snum + "&nbsp秒";
+  }
+  setInterval("createtime()",250);
+  </script>
+</div>
+
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  var relativeDate = function() {
+    var updatedTime = document.getElementById('updated-time');
+    if (updatedTime) {
+      var text = updatedTime.textContent;
+      var reg = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})/;
+      var matchs = text.match(reg);
+      if (matchs) {
+        var relativeTime = moment(matchs[0]).fromNow();
+        updatedTime.textContent = text.replace(reg, relativeTime);
+      }
+      updatedTime.style.display = '';
+    }
+  };
+  Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/moment.min.js', function() {
+    if (!'zh-cn'.startsWith('en')) {
+      Fluid.utils.createScript('https://lib.baomitu.com/moment.js/2.29.4/locale/zh-cn.min.js', function() {
+        relativeDate();
+      });
+    } else {
+      relativeDate();
+    }
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  
+<script src="/js/scrollAnimation.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+<!-- hexo injector body_end start --><script src="/js/backgroundize.js"></script><!-- hexo injector body_end end --></body>
+</html>
